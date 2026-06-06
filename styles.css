@@ -158,61 +158,9 @@ header p {
     border-color: transparent;
 }
 
-/* ── Table of contents ── */
-.toc {
-    margin-bottom: 10px;
-    overflow-x: auto;
-}
-
-.toc h3 {
-    font-size: 0.7rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    color: #8b949e;
-    margin: 0 0 12px;
-}
-
-.toc ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-wrap: nowrap;
-    gap: 6px;
-}
-
-.toc ul li {
-    margin: 0;
-}
-
-.toc ul a {
-    display: block;
-    color: #58a6ff;
-    font-size: 0.75rem;
-    font-weight: 500;
-    text-decoration: none;
-    padding: 4px 12px;
-    background: rgba(88, 166, 255, 0.06);
-    border: 1px solid rgba(88, 166, 255, 0.25);
-    border-radius: 20px;
-    white-space: nowrap;
-    transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
-}
-
-.toc ul a:hover {
-    border-color: #0ea5e9;
-    color: #0ea5e9;
-    background: rgba(14, 165, 233, 0.12);
-    box-shadow: 0 0 8px rgba(14, 165, 233, 0.2);
-    text-decoration: none;
-}
 
 /* ── Section headings ── */
 h2 {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
     font-size: 1.3rem;
     font-weight: 600;
     color: #e6edf3;
@@ -568,27 +516,7 @@ a:hover {
     width: 100%;
 }
 
-/* ── Back to top ── */
-.back-to-top {
-    font-size: 0.65rem;
-    font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
-    font-weight: 600;
-    color: #3d444d;
-    text-decoration: none;
-    padding: 2px 8px;
-    border: 1px solid #30363d;
-    border-radius: 6px;
-    letter-spacing: 0.5px;
-    flex-shrink: 0;
-    margin-left: 12px;
-    transition: color 0.2s ease, border-color 0.2s ease;
-}
 
-.back-to-top:hover {
-    color: #0ea5e9;
-    border-color: #0ea5e9;
-    text-decoration: none;
-}
 
 .role-highlight {
     display: inline-block;
@@ -603,6 +531,168 @@ a:hover {
     letter-spacing: 0.9px;
     margin-top: 28px;
     margin-bottom: 6px;
+}
+
+/* ── Side navigation ── */
+@keyframes snav-pulse {
+    0%, 100% { box-shadow: 0 0 5px rgba(14,165,233,0.8), 0 0 12px rgba(14,165,233,0.35); }
+    50%       { box-shadow: 0 0 9px rgba(14,165,233,1),   0 0 22px rgba(14,165,233,0.6);  }
+}
+
+@keyframes snav-flow {
+    from { background-position: 0 0; }
+    to   { background-position: 0 40px; }
+}
+
+.side-nav {
+    position: fixed;
+    right: calc(50vw + 442px); /* right edge always 12px left of container */
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 200;
+    pointer-events: none;
+}
+
+.side-nav * { pointer-events: auto; }
+
+.side-nav-list {
+    list-style: none;
+    padding: 0 24px 0 0; /* space on right for spine/dots */
+    margin: 0;
+    position: relative;
+}
+
+/* Animated data-flow spine */
+.side-nav-list::before {
+    content: '';
+    position: absolute;
+    right: 6px; /* center of 13px dot */
+    left: auto;
+    top: 12px;
+    bottom: 12px;
+    width: 1px;
+    background: repeating-linear-gradient(
+        to bottom,
+        rgba(14,165,233,0.0)  0px,
+        rgba(14,165,233,0.18) 8px,
+        rgba(14,165,233,0.06) 12px,
+        rgba(14,165,233,0.0)  20px,
+        rgba(14,165,233,0.18) 28px,
+        rgba(14,165,233,0.18) 36px,
+        rgba(14,165,233,0.0)  40px
+    );
+    background-size: 1px 40px;
+    animation: snav-flow 3s linear infinite;
+}
+
+.side-nav-item {
+    margin: 0;
+    position: relative;
+}
+
+.side-nav-item > a {
+    display: flex;
+    align-items: center;
+    flex-direction: row-reverse; /* dot on right, label on left */
+    justify-content: flex-start;
+    gap: 14px;
+    padding: 9px 0;
+    text-decoration: none;
+}
+
+.snav-dot {
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    border: 1.5px solid rgba(14,165,233,0.22);
+    background: #0d1117;
+    transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.snav-label {
+    font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: rgba(139,148,158,0.38);
+    white-space: nowrap;
+    letter-spacing: 0.4px;
+    transition: color 0.3s ease;
+}
+
+/* Hover */
+.side-nav-item > a:hover .snav-dot   { border-color: rgba(14,165,233,0.5); }
+.side-nav-item > a:hover .snav-label { color: rgba(139,148,158,0.65); }
+
+/* Active main section */
+.side-nav-item.active > a .snav-dot {
+    background: #0ea5e9;
+    border-color: #0ea5e9;
+    animation: snav-pulse 2s ease-in-out infinite;
+}
+
+.side-nav-item.active > a .snav-label {
+    color: #58a6ff;
+    font-weight: 700;
+}
+
+/* Subsections */
+.side-nav-subs {
+    list-style: none;
+    padding: 0 18px 0 0; /* indent on right */
+    margin: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.35s ease;
+}
+
+.side-nav-item.active .side-nav-subs {
+    max-height: 320px;
+}
+
+.side-nav-subs li {
+    margin: 0;
+}
+
+.side-nav-subs li > a {
+    display: flex;
+    align-items: center;
+    flex-direction: row-reverse;
+    justify-content: flex-start;
+    gap: 12px;
+    padding: 7px 0;
+    text-decoration: none;
+}
+
+.side-nav-subs .snav-dot {
+    width: 9px;
+    height: 9px;
+    border: 1.5px solid rgba(14,165,233,0.15);
+    background: #0d1117;
+}
+
+.side-nav-subs .snav-label {
+    font-size: 0.82rem;
+    color: rgba(139,148,158,0.3);
+}
+
+.side-nav-subs li > a:hover .snav-label { color: rgba(139,148,158,0.55); }
+.side-nav-subs li > a:hover .snav-dot   { border-color: rgba(14,165,233,0.4); }
+
+.side-nav-subs li.active > a .snav-dot {
+    background: #0ea5e9;
+    border-color: #0ea5e9;
+    box-shadow: 0 0 5px rgba(14,165,233,0.7);
+}
+
+.side-nav-subs li.active > a .snav-label {
+    color: #0ea5e9;
+    font-weight: 700;
+}
+
+/* Hide on narrow viewports */
+@media (max-width: 1100px) {
+    .side-nav { display: none; }
 }
 
 /* ── Responsive ── */
@@ -640,11 +730,6 @@ a:hover {
         width: 100%;
         max-width: 260px;
         text-align: center;
-    }
-
-    .toc ul {
-        flex-direction: column;
-        gap: 6px;
     }
 
     .exp-header {

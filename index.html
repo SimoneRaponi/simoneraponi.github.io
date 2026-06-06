@@ -11,6 +11,8 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+<nav id="side-nav" class="side-nav" aria-label="Page navigation"></nav>
+
 <div class="container">
 
     <header id="top">
@@ -96,18 +98,6 @@
         <a href="https://www.linkedin.com/in/simone-raponi">LinkedIn</a>
     </section>
 
-    <section class="toc">
-        <h3>Contents</h3>
-        <ul>
-            <li><a href="#latest-news">News</a></li>
-            <li><a href="#experience">Experience</a></li>
-            <li><a href="#grants">Grants</a></li>
-            <li><a href="#patents">Patents</a></li>
-            <li><a href="#publications">Publications</a></li>
-            <li><a href="#academic-services">Services</a></li>
-            <li><a href="#extracurricular">Extracurricular</a></li>
-        </ul>
-    </section>
 
     <section id="latest-news">
         <h2>Latest News &amp; Achievements</h2>
@@ -290,7 +280,7 @@
         <h2>Publications</h2>
         <p class="section-subtitle"><strong>1 book &nbsp;·&nbsp; 11 journal papers &nbsp;·&nbsp; 12 conference papers</strong></p>
 
-        <h3 class="pub-section-title">Book</h3>
+        <h3 class="pub-section-title" id="pub-book">Book</h3>
         <ul class="publications-list">
             <li>
                 <div class="pub-row">
@@ -304,7 +294,7 @@
             </li>
         </ul>
 
-        <h3 class="pub-section-title">Journal Papers</h3>
+        <h3 class="pub-section-title" id="pub-journals">Journal Papers</h3>
         <ul class="publications-list">
             <li>
                 <div class="pub-row">
@@ -418,7 +408,7 @@
             </li>
         </ul>
 
-        <h3 class="pub-section-title">Conference Papers</h3>
+        <h3 class="pub-section-title" id="pub-conferences">Conference Papers</h3>
         <ul class="publications-list">
             <li>
                 <div class="pub-row">
@@ -546,7 +536,7 @@
     <section id="academic-services">
         <h2>Academic Services</h2>
 
-        <span class="role-highlight">Technical Program Committee</span>
+        <span class="role-highlight" id="serv-pc">Technical Program Committee</span>
         <p class="section-subtitle">PC member for <strong>20+</strong> prestigious international conferences, including:</p>
         <ul class="publications-list">
             <li>
@@ -623,7 +613,7 @@
             </li>
         </ul>
 
-        <span class="role-highlight">Reviewer</span>
+        <span class="role-highlight" id="serv-reviewer">Reviewer</span>
         <p class="section-subtitle">Reviewer for <strong>50+</strong> leading international conferences and journals, including:</p>
         <ul class="tag-cloud">
             <li>IEEE INFOCOM</li>
@@ -641,7 +631,7 @@
             <li class="tag-book">📖 Technical Reviewer &mdash; <em>10 Machine Learning Blueprints you should know for Cybersecurity</em></li>
         </ul>
 
-        <span class="role-highlight">Session Chair</span>
+        <span class="role-highlight" id="serv-chair">Session Chair</span>
         <ul class="publications-list">
             <li>
                 <div class="pub-row">
@@ -654,7 +644,7 @@
             </li>
         </ul>
 
-        <span class="role-highlight">Mentor</span>
+        <span class="role-highlight" id="serv-mentor">Mentor</span>
         <ul class="publications-list">
             <li>
                 <div class="pub-row">
@@ -726,14 +716,110 @@
 </div>
 
 <script>
-document.querySelectorAll('section > h2').forEach(function(h2) {
-    var a = document.createElement('a');
-    a.href = '#top';
-    a.className = 'back-to-top';
-    a.textContent = '↑ top';
-    a.title = 'Back to top';
-    h2.appendChild(a);
-});
+/* ── Side navigation ── */
+(function() {
+    var NAV = [
+        { id: 'latest-news',      label: 'News' },
+        { id: 'experience',       label: 'Experience' },
+        { id: 'grants',           label: 'Grants' },
+        { id: 'patents',          label: 'Patents' },
+        { id: 'publications',     label: 'Publications', subs: [
+            { id: 'pub-book',         label: 'Book' },
+            { id: 'pub-journals',     label: 'Journals' },
+            { id: 'pub-conferences',  label: 'Conferences' }
+        ]},
+        { id: 'academic-services', label: 'Services', subs: [
+            { id: 'serv-pc',       label: 'PC Committee' },
+            { id: 'serv-reviewer', label: 'Reviewer' },
+            { id: 'serv-chair',    label: 'Chair' },
+            { id: 'serv-mentor',   label: 'Mentor' }
+        ]},
+        { id: 'extracurricular',  label: 'Extras' }
+    ];
+
+    /* Build DOM */
+    var nav = document.getElementById('side-nav');
+    var ul  = document.createElement('ul');
+    ul.className = 'side-nav-list';
+
+    NAV.forEach(function(item) {
+        var li = document.createElement('li');
+        li.className = 'side-nav-item';
+        li.dataset.section = item.id;
+
+        var a = document.createElement('a');
+        a.href = '#' + item.id;
+        a.innerHTML = '<span class="snav-dot"></span><span class="snav-label">' + item.label + '</span>';
+        li.appendChild(a);
+
+        if (item.subs) {
+            var subUl = document.createElement('ul');
+            subUl.className = 'side-nav-subs';
+            item.subs.forEach(function(sub) {
+                var subLi = document.createElement('li');
+                subLi.dataset.section = sub.id;
+                subLi.innerHTML = '<a href="#' + sub.id + '"><span class="snav-dot"></span><span class="snav-label">' + sub.label + '</span></a>';
+                subUl.appendChild(subLi);
+            });
+            li.appendChild(subUl);
+        }
+        ul.appendChild(li);
+    });
+    nav.appendChild(ul);
+
+    /* Scroll tracking */
+    function getActive() {
+        /* When at the very bottom, always activate the last section */
+        var atBottom = (window.scrollY + window.innerHeight) >= (document.documentElement.scrollHeight - 60);
+        if (atBottom) {
+            return { section: NAV[NAV.length - 1].id, sub: null };
+        }
+
+        var scrollY = window.scrollY + window.innerHeight * 0.35;
+        var section = null;
+        var sub     = null;
+
+        NAV.forEach(function(item) {
+            var el = document.getElementById(item.id);
+            if (el && el.getBoundingClientRect().top + window.scrollY <= scrollY) {
+                section = item.id;
+                sub = null;
+            }
+            if (item.subs) {
+                item.subs.forEach(function(s) {
+                    var se = document.getElementById(s.id);
+                    if (se && se.getBoundingClientRect().top + window.scrollY <= scrollY) {
+                        section = item.id;
+                        sub = s.id;
+                    }
+                });
+            }
+        });
+        return { section: section, sub: sub };
+    }
+
+    function applyActive(active) {
+        document.querySelectorAll('.side-nav-item').forEach(function(el) {
+            el.classList.toggle('active', el.dataset.section === active.section);
+        });
+        document.querySelectorAll('.side-nav-subs li').forEach(function(el) {
+            el.classList.toggle('active', !!active.sub && el.dataset.section === active.sub);
+        });
+    }
+
+    var ticking = false;
+    window.addEventListener('scroll', function() {
+        if (!ticking) {
+            requestAnimationFrame(function() {
+                applyActive(getActive());
+                ticking = false;
+            });
+            ticking = true;
+        }
+    }, { passive: true });
+
+    applyActive(getActive());
+})();
 </script>
 </body>
 </html>
