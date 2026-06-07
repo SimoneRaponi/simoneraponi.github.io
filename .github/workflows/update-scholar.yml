@@ -21,28 +21,25 @@ jobs:
 
       - name: Install dependencies
         run: |
-          sudo apt-get install -y tor privoxy
-          # Forward Privoxy → Tor SOCKS5
-          echo 'forward-socks5 / 127.0.0.1:9050 .' | sudo tee -a /etc/privoxy/config
+          sudo apt-get install -y tor
           sudo service tor start
-          sudo service privoxy start
           # Wait for Tor to bootstrap
           sleep 20
 
       - name: Install scholarly
-        run: pip install scholarly
+        run: pip install scholarly PySocks
 
       - name: Fetch Scholar stats
         shell: python3 {0}
         run: |
-          import json, os, sys, time
+          import json, os, sys, time, socks, socket
           from datetime import date
-          from scholarly import scholarly, ProxyGenerator
+          from scholarly import scholarly
 
-          # Route scholarly through Privoxy → Tor
-          pg = ProxyGenerator()
-          pg.SingleProxy(http='http://127.0.0.1:8118', https='http://127.0.0.1:8118')
-          scholarly.use_proxy(pg)
+          # Patch the default socket to route all connections through Tor SOCKS5
+          # (bypasses scholarly's proxy system entirely)
+          socks.set_default_proxy(socks.SOCKS5, "127.0.0.1", 9050)
+          socket.socket = socks.socksocket
 
           author = None
           for attempt in range(3):
