@@ -30,14 +30,10 @@
         </div>
 
         <p>
-            <em>"From the Dark Web to the Deep Sea"</em> is the literal arc of my career, a decade of bringing
-            <strong>Artificial Intelligence</strong> and <strong>Machine Learning</strong> to bear on adversarial problems
-            at the extremes of the digital and physical world. It began underground: hunting anonymous actors in criminal networks,
-            exposing their behavioral fingerprints, and mapping their geographic origins through layers of deliberate obfuscation.
-            From there, the scope expanded across communication protocols, critical infrastructures, the electromagnetic spectrum,
-            and the maritime domain, always guided by the same question: where can intelligent systems make the decisive difference
-            between an attacker succeeding and failing? Today, that question has carried me to the ocean floor.
-            Each chapter of that journey is worth a closer look, <em>click any entry below to explore it.</em>
+            A decade of bringing <strong>AI&thinsp;&amp;&thinsp;ML</strong> to adversarial problems at the extremes —
+            from criminal networks and critical infrastructure to satellite systems and the ocean floor.
+            One question drives it all: where can intelligent systems make the decisive difference?
+            <em>Click any entry below to find out.</em>
         </p>
 
         <div class="bio-accordion">
@@ -255,7 +251,7 @@
     </header>
 
     <section class="links">
-        <a href="mailto:s.raponi.93@gmail.com">Email Me</a>
+        <a href="#" data-m>Email Me</a>
         <a href="data/simone_raponi_cv.pdf" download>Download CV</a>
         <a href="https://scholar.google.it/citations?hl=en&user=IgaW2DoAAAAJ">Google Scholar</a>
         <a href="https://github.com/SimoneRaponi">GitHub</a>
@@ -402,7 +398,7 @@
                 at the frontier of AI, cybersecurity, or wherever the two collide,
                 why wait to find out?
             </p>
-            <a href="mailto:s.raponi.93@gmail.com" class="signal-btn">Signal me &rarr;</a>
+            <a href="#" data-m class="signal-btn">Signal me &rarr;</a>
         </div>
     </section>
 
@@ -844,7 +840,7 @@
     </div>
     <div class="rpanel-sep"></div>
     <div class="rpanel-links">
-        <a href="mailto:s.raponi.93@gmail.com">Email</a>
+        <a href="#" data-m>Email</a>
         <a href="https://scholar.google.it/citations?hl=en&user=IgaW2DoAAAAJ" target="_blank" rel="noopener">Scholar</a>
         <a href="https://github.com/SimoneRaponi" target="_blank" rel="noopener">GitHub</a>
         <a href="https://www.linkedin.com/in/simone-raponi" target="_blank" rel="noopener">LinkedIn</a>
@@ -1255,6 +1251,15 @@
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     document.querySelectorAll('.rpanel-area-list li.done').forEach(function (li, i) {
         li.style.animationDelay = (300 + i * 75) + 'ms';
+    });
+}());
+
+/* ── Email obfuscation ── */
+(function () {
+    var p1 = 's.raponi', p2 = '.93', p3 = String.fromCharCode(64), p4 = 'gmail', p5 = '.com';
+    var addr = p1 + p2 + p3 + p4 + p5;
+    document.querySelectorAll('[data-m]').forEach(function (el) {
+        el.href = 'mailto:' + addr;
     });
 }());
 
