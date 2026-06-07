@@ -80,11 +80,11 @@
 
         <div class="stats-row">
             <div class="stat">
-                <span class="stat-num">16</span>
+                <span class="stat-num" data-scholar="hindex">16</span>
                 <span class="stat-label">H-Index</span>
             </div>
             <div class="stat">
-                <span class="stat-num">1,615</span>
+                <span class="stat-num" data-scholar="citations">1,615</span>
                 <span class="stat-label">Citations</span>
             </div>
             <div class="stat">
@@ -897,14 +897,12 @@
     });
 }());
 
-/* ── Animated stat counters ── */
+/* ── Animated stat counters (with Scholar data refresh) ── */
 (function () {
     if (!window.IntersectionObserver) return;
 
     var statsRow = document.querySelector('.stats-row');
     if (!statsRow) return;
-
-    var stats = statsRow.querySelectorAll('.stat-num');
 
     function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3); }
 
@@ -922,18 +920,41 @@
         }, delay);
     }
 
-    var observer = new IntersectionObserver(function (entries) {
-        if (!entries[0].isIntersecting) return;
-        observer.disconnect();
-        stats.forEach(function (el, i) {
-            var raw = el.textContent.trim();
-            var hasComma = raw.indexOf(',') !== -1;
-            var target = parseInt(raw.replace(/,/g, ''), 10);
-            countUp(el, target, hasComma, 1500, i * 120);
-        });
-    }, { threshold: 0.7 });
+    function startCounters() {
+        var stats = statsRow.querySelectorAll('.stat-num');
+        var obs = new IntersectionObserver(function (entries) {
+            if (!entries[0].isIntersecting) return;
+            obs.disconnect();
+            stats.forEach(function (el, i) {
+                var raw = el.textContent.trim();
+                var hasComma = raw.indexOf(',') !== -1;
+                var target = parseInt(raw.replace(/,/g, ''), 10);
+                countUp(el, target, hasComma, 1500, i * 120);
+            });
+        }, { threshold: 0.7 });
+        obs.observe(statsRow);
+    }
 
-    observer.observe(statsRow);
+    /* Fetch the pre-built JSON (updated weekly by GitHub Actions).
+       Give it 1.5 s to respond; fall back to the static values silently. */
+    var deadline = new Promise(function (resolve) { setTimeout(resolve, 1500); });
+    var remote   = fetch('./data/scholar.json')
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .catch(function ()  { return null; });
+
+    Promise.race([remote, deadline]).then(function (data) {
+        if (data) {
+            var map = { citations: data.citations, hindex: data.hindex };
+            statsRow.querySelectorAll('.stat-num[data-scholar]').forEach(function (el) {
+                var key = el.getAttribute('data-scholar');
+                if (map[key] != null) {
+                    var v = Number(map[key]);
+                    el.textContent = v >= 1000 ? v.toLocaleString('en-US') : String(v);
+                }
+            });
+        }
+        startCounters();
+    });
 }());
 </script>
 </body>

@@ -1,0 +1,75 @@
+name: Update Scholar Stats
+
+on:
+  schedule:
+    - cron: '0 7 * * *'   # Every day at 07:00 UTC
+  workflow_dispatch:        # Allow manual trigger from the Actions tab
+
+permissions:
+  contents: write
+
+jobs:
+  update-stats:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fetch Scholar stats
+        shell: python3 {0}
+        run: |
+          import urllib.request, re, json, sys, os, time
+          from datetime import date
+
+          USER    = 'IgaW2DoAAAAJ'
+          URL     = f'https://scholar.google.com/citations?user={USER}&hl=en'
+          HEADERS = {
+              'User-Agent': (
+                  'Mozilla/5.0 (X11; Linux x86_64) '
+                  'AppleWebKit/537.36 (KHTML, like Gecko) '
+                  'Chrome/124.0.0.0 Safari/537.36'
+              ),
+              'Accept-Language': 'en-US,en;q=0.9',
+          }
+
+          html = None
+          for attempt in range(3):
+              try:
+                  req  = urllib.request.Request(URL, headers=HEADERS)
+                  html = urllib.request.urlopen(req, timeout=20).read().decode('utf-8')
+                  break
+              except Exception as exc:
+                  print(f'Attempt {attempt + 1} failed: {exc}', file=sys.stderr)
+                  if attempt < 2:
+                      time.sleep(20)
+
+          if html is None:
+              sys.exit(1)
+
+          # Stats table cells come in pairs (all-time, since-year) per row:
+          # row 0 = Citations, row 1 = h-index, row 2 = i10-index
+          vals = re.findall(r'<td class="gsc_rsb_std">(\d+)</td>', html)
+          if len(vals) < 3:
+              print(f'Unexpected HTML — found cells: {vals}', file=sys.stderr)
+              sys.exit(1)
+
+          data = {
+              'citations': int(vals[0]),
+              'hindex':    int(vals[2]),
+              'updated':   date.today().isoformat(),
+          }
+
+          os.makedirs('data', exist_ok=True)
+          with open('data/scholar.json', 'w') as fh:
+              json.dump(data, fh, indent=2)
+              fh.write('\n')
+
+          print(f"citations={data['citations']}, hindex={data['hindex']}")
+
+      - name: Commit if changed
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/scholar.json
+          git diff --cached --quiet || git commit -m "chore: update Scholar stats [skip ci]"
+          git push
