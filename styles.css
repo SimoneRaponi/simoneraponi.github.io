@@ -769,6 +769,23 @@ a:hover {
     color: #fff;
 }
 
+/* ── Disclosure footer ── */
+.disclosure {
+    margin-top: 60px;
+    padding-top: 28px;
+    border-top: 1px solid #21262d;
+    text-align: center;
+}
+
+.disclosure p {
+    font-size: 0.78rem;
+    color: #8b949e;
+    line-height: 1.7;
+    max-width: 580px;
+    margin: 0 auto;
+    font-style: italic;
+}
+
 /* ── Responsive ── */
 @media (max-width: 680px) {
     .container {
