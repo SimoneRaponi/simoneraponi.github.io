@@ -19,11 +19,15 @@
 <div class="container">
 
     <header id="top">
-        <div class="profile-frame">
-            <img src="./img/simo_new.jpg" alt="Simone Raponi" class="profile-pic">
+        <div class="hero-top">
+            <div class="profile-frame">
+                <img src="./img/simo_new.jpg" alt="Simone Raponi" class="profile-pic">
+            </div>
+            <div class="hero-text">
+                <h1>Simone Raponi</h1>
+                <p class="tagline">AI &amp; Cybersecurity &nbsp;·&nbsp; From the Dark Web to the Deep Sea</p>
+            </div>
         </div>
-        <h1>Simone Raponi</h1>
-        <p class="tagline">AI &amp; Cybersecurity &nbsp;·&nbsp; From the Dark Web to the Deep Sea</p>
 
         <p>
             <em>"From the Dark Web to the Deep Sea"</em> is the literal arc of my career, a decade of bringing
@@ -253,7 +257,7 @@
                 at the frontier of AI, cybersecurity, or wherever the two collide,
                 why wait to find out?
             </p>
-            <a href="mailto:s.raponi.93@gmail.com" class="signal-btn">Let's explore &rarr;</a>
+            <a href="mailto:s.raponi.93@gmail.com" class="signal-btn">Signal me &rarr;</a>
         </div>
     </section>
 
@@ -346,7 +350,7 @@
                     <div class="pub-content">
                         <div class="pub-title">PAST-AI: Physical-layer Authentication of Satellite Transmitters via Deep Learning</div>
                         <div class="pub-authors">Gabriele Oligeri, Savio Sciancalepore, <u>Simone Raponi</u>, Roberto Di Pietro</div>
-                        <div class="pub-venue">IEEE Transactions on Information Forensics &amp; Security (TIFS)</div>
+                        <div class="pub-venue top-venue">IEEE Transactions on Information Forensics &amp; Security (TIFS)</div>
                     </div>
                 </div>
             </li>
@@ -356,7 +360,7 @@
                     <div class="pub-content">
                         <div class="pub-title">Fake News Propagation: A Review of Epidemic Models, Datasets, and Insights</div>
                         <div class="pub-authors"><u>Simone Raponi</u>, Zeinab Khalifa, Gabriele Oligeri, Roberto Di Pietro</div>
-                        <div class="pub-venue">ACM Transactions on the Web</div>
+                        <div class="pub-venue top-venue">ACM Transactions on the Web</div>
                     </div>
                 </div>
             </li>
@@ -386,7 +390,7 @@
                     <div class="pub-content">
                         <div class="pub-title">Cryptomining Makes Noise: Detecting Cryptojacking via Machine Learning</div>
                         <div class="pub-authors">Maurantonio Caprolu, <u>Simone Raponi</u>, Gabriele Oligeri, Roberto Di Pietro</div>
-                        <div class="pub-venue">Computer Communications</div>
+                        <div class="pub-venue top-venue">Computer Communications</div>
                     </div>
                 </div>
             </li>
@@ -406,7 +410,7 @@
                     <div class="pub-content">
                         <div class="pub-title">Vessels Cybersecurity: Issues, Challenges, and the Road Ahead</div>
                         <div class="pub-authors">Maurantonio Caprolu, Roberto Di Pietro, <u>Simone Raponi</u>, Savio Sciancalepore, Pietro Tedeschi</div>
-                        <div class="pub-venue">IEEE Communication Magazine</div>
+                        <div class="pub-venue top-venue">IEEE Communication Magazine</div>
                     </div>
                 </div>
             </li>
@@ -416,7 +420,7 @@
                     <div class="pub-content">
                         <div class="pub-title">Nationality and Geolocation-Based Profiling in the Dark (Web)</div>
                         <div class="pub-authors">Massimo La Morgia, Alessandro Mei, Eugenio Nerio Nemmi, <u>Simone Raponi</u>, Julinda Stefa</div>
-                        <div class="pub-venue">IEEE Transactions on Services Computing</div>
+                        <div class="pub-venue top-venue">IEEE Transactions on Services Computing</div>
                     </div>
                 </div>
             </li>
@@ -648,22 +652,7 @@
         </ul>
 
         <span class="role-highlight" id="serv-reviewer">Reviewer</span>
-        <p class="section-subtitle">Reviewer for <strong>50+</strong> leading international conferences and journals, including:</p>
-        <ul class="tag-cloud">
-            <li>IEEE INFOCOM</li>
-            <li>ACM WISEC</li>
-            <li>IEEE Internet of Things Journal</li>
-            <li>IEEE Access</li>
-            <li>Computer Communications</li>
-            <li>Computer Networks</li>
-            <li>Transactions on Emerging Telecom. Technologies</li>
-            <li>Pervasive and Mobile Computing</li>
-            <li>International Journal of Information Security</li>
-            <li>Journal of Computer Security</li>
-            <li>IET Information Security</li>
-            <li>Security and Communication Networks</li>
-            <li class="tag-book">📖 Technical Reviewer &mdash; <em>10 Machine Learning Blueprints you should know for Cybersecurity</em></li>
-        </ul>
+        <p class="section-subtitle">Reviewer for <strong>50+</strong> venues across IEEE, ACM, Elsevier, and Springer, including <strong>IEEE INFOCOM</strong>, <strong>ACM WiSec</strong>, <strong>IEEE Internet of Things Journal</strong>, <strong>IEEE Access</strong>, and <strong>Computer Communications</strong>. Technical Reviewer for <em>"10 Machine Learning Blueprints you should know for Cybersecurity"</em> (Packt).</p>
 
         <span class="role-highlight" id="serv-chair">Session Chair</span>
         <ul class="publications-list">
@@ -1163,6 +1152,19 @@
             dot.style.opacity  = '1';
             ring.style.opacity = '1';
         }
+    });
+}());
+
+/* ── Publications accordion (mobile only) ── */
+(function () {
+    if (window.innerWidth > 680) return;
+    document.querySelectorAll('#publications .pub-section-title').forEach(function (h3) {
+        var ul = h3.nextElementSibling;
+        if (!ul || !ul.classList.contains('publications-list')) return;
+        h3.addEventListener('click', function () {
+            h3.classList.toggle('pub-open');
+            ul.classList.toggle('pub-open');
+        });
     });
 }());
 
