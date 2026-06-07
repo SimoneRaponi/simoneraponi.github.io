@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+<div id="scroll-progress"></div>
 <nav id="side-nav" class="side-nav" aria-label="Page navigation"></nav>
 
 <div class="container">
@@ -750,6 +751,14 @@
 
 </div>
 
+<nav id="mobile-nav" class="mobile-nav" aria-label="Section navigation">
+    <span class="mnav-label" id="mnav-label"></span>
+    <div class="mnav-row">
+        <div class="mnav-dots" id="mnav-dots"></div>
+        <button class="mnav-top" id="mnav-top" aria-label="Back to top">↑</button>
+    </div>
+</nav>
+
 <script>
 /* ── Side navigation ── */
 (function() {
@@ -859,6 +868,78 @@
 </script>
 
 <script>
+/* ── Scroll progress bar ── */
+(function () {
+    var bar = document.getElementById('scroll-progress');
+    if (!bar) return;
+    function update() {
+        var total = document.documentElement.scrollHeight - window.innerHeight;
+        bar.style.width = (total > 0 ? (window.scrollY / total) * 100 : 0) + '%';
+    }
+    window.addEventListener('scroll', update, { passive: true });
+}());
+
+/* ── Mobile navigation bar ── */
+(function () {
+    var labelEl = document.getElementById('mnav-label');
+    var dotsEl  = document.getElementById('mnav-dots');
+    var topBtn  = document.getElementById('mnav-top');
+    if (!labelEl || !dotsEl) return;
+
+    var SECTIONS = [
+        { id: 'latest-news',       label: 'News' },
+        { id: 'experience',        label: 'Experience' },
+        { id: 'signal',            label: 'Signal' },
+        { id: 'grants',            label: 'Grants' },
+        { id: 'patents',           label: 'Patents' },
+        { id: 'publications',      label: 'Publications' },
+        { id: 'academic-services', label: 'Services' },
+        { id: 'extracurricular',   label: 'Extras' }
+    ];
+
+    var dots = SECTIONS.map(function (s) {
+        var btn = document.createElement('button');
+        btn.className = 'mnav-dot';
+        btn.setAttribute('aria-label', 'Go to ' + s.label);
+        btn.addEventListener('click', function () {
+            var el = document.getElementById(s.id);
+            if (el) el.scrollIntoView({ behavior: 'smooth' });
+        });
+        dotsEl.appendChild(btn);
+        return btn;
+    });
+
+    if (topBtn) {
+        topBtn.addEventListener('click', function () {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    }
+
+    function getActive() {
+        var atBottom = (window.scrollY + window.innerHeight) >= (document.documentElement.scrollHeight - 60);
+        if (atBottom) return SECTIONS.length - 1;
+        var scrollY = window.scrollY + window.innerHeight * 0.35;
+        var active  = 0;
+        SECTIONS.forEach(function (s, i) {
+            var el = document.getElementById(s.id);
+            if (el && el.getBoundingClientRect().top + window.scrollY <= scrollY) active = i;
+        });
+        return active;
+    }
+
+    var current = -1;
+    function update() {
+        var active = getActive();
+        if (active === current) return;
+        current = active;
+        dots.forEach(function (d, i) { d.classList.toggle('active', i === active); });
+        labelEl.textContent = SECTIONS[active].label;
+    }
+
+    window.addEventListener('scroll', update, { passive: true });
+    update();
+}());
+
 /* ── Scroll-triggered reveal ── */
 (function () {
     if (!window.IntersectionObserver) return;

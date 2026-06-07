@@ -786,6 +786,113 @@ a:hover {
     font-style: italic;
 }
 
+/* ── Scroll progress bar ── */
+#scroll-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 0%;
+    height: 2px;
+    background: linear-gradient(90deg, #0ea5e9, #6366f1);
+    z-index: 1000;
+    transition: width 0.08s linear;
+    pointer-events: none;
+}
+
+/* ── Mobile navigation bar ── */
+.mobile-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 300;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 7px;
+    padding: 10px 20px calc(12px + env(safe-area-inset-bottom, 0px));
+    background: rgba(13, 17, 23, 0.92);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-top: 1px solid #21262d;
+}
+
+@media (max-width: 1099px) {
+    .mobile-nav { display: flex; }
+    .container   { margin-bottom: 80px; }
+}
+
+.mnav-label {
+    font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+    font-size: 0.62rem;
+    font-weight: 600;
+    color: #0ea5e9;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    min-height: 13px;
+}
+
+.mnav-row {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+.mnav-dots {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.mnav-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: transparent;
+    border: 1.5px solid rgba(14, 165, 233, 0.22);
+    cursor: pointer;
+    transition: background 0.3s, border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+    -webkit-tap-highlight-color: transparent;
+    padding: 0;
+    position: relative;
+}
+
+.mnav-dot::after {
+    content: '';
+    position: absolute;
+    inset: -8px; /* larger tap target */
+}
+
+.mnav-dot.active {
+    background: #0ea5e9;
+    border-color: #0ea5e9;
+    transform: scale(1.5);
+    animation: snav-pulse 2s ease-in-out infinite;
+}
+
+.mnav-top {
+    background: none;
+    border: 1.5px solid rgba(14, 165, 233, 0.22);
+    border-radius: 50%;
+    width: 26px;
+    height: 26px;
+    color: #8b949e;
+    font-size: 0.85rem;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    -webkit-tap-highlight-color: transparent;
+    transition: border-color 0.2s, color 0.2s;
+    flex-shrink: 0;
+}
+
+.mnav-top:active {
+    border-color: #0ea5e9;
+    color: #0ea5e9;
+}
+
 /* ── Scroll reveal ── */
 .reveal {
     opacity: 0;
@@ -855,4 +962,14 @@ a:hover {
         flex-direction: column;
         gap: 8px;
     }
+
+    .profile-pic   { width: 210px; }
+    .signal-card   { padding: 28px 22px; }
+    .signal-headline { font-size: 1.2rem; }
+}
+
+@media (max-width: 400px) {
+    .stat        { min-width: 54px; padding: 10px 6px; }
+    .stat-num    { font-size: 1.1rem; }
+    .stat-label  { font-size: 0.55rem; letter-spacing: 0.8px; }
 }
