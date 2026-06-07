@@ -857,5 +857,84 @@
     applyActive(getActive());
 })();
 </script>
+
+<script>
+/* ── Scroll-triggered reveal ── */
+(function () {
+    if (!window.IntersectionObserver) return;
+
+    var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.08, rootMargin: '0px 0px -20px 0px' });
+
+    function mark(selector, stagger) {
+        document.querySelectorAll(selector).forEach(function (el, i) {
+            el.classList.add('reveal');
+            if (stagger) el.style.transitionDelay = (i * stagger) + 'ms';
+            observer.observe(el);
+        });
+    }
+
+    mark('section h2', 0);
+    mark('.signal-card', 0);
+    mark('.experience-list > li', 80);
+    mark('.news-list > li', 50);
+    mark('.grants-list > li', 80);
+    mark('.disclosure p', 0);
+
+    /* Publications: reset stagger per list to avoid huge accumulated delays */
+    document.querySelectorAll('.publications-list').forEach(function (list) {
+        list.querySelectorAll('li').forEach(function (el, i) {
+            el.classList.add('reveal');
+            el.style.transitionDelay = Math.min(i * 22, 220) + 'ms';
+            observer.observe(el);
+        });
+    });
+}());
+
+/* ── Animated stat counters ── */
+(function () {
+    if (!window.IntersectionObserver) return;
+
+    var statsRow = document.querySelector('.stats-row');
+    if (!statsRow) return;
+
+    var stats = statsRow.querySelectorAll('.stat-num');
+
+    function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3); }
+
+    function countUp(el, target, hasComma, duration, delay) {
+        setTimeout(function () {
+            var t0 = null;
+            function tick(ts) {
+                if (!t0) t0 = ts;
+                var p = Math.min((ts - t0) / duration, 1);
+                var v = Math.round(easeOutCubic(p) * target);
+                el.textContent = hasComma ? v.toLocaleString('en-US') : String(v);
+                if (p < 1) requestAnimationFrame(tick);
+            }
+            requestAnimationFrame(tick);
+        }, delay);
+    }
+
+    var observer = new IntersectionObserver(function (entries) {
+        if (!entries[0].isIntersecting) return;
+        observer.disconnect();
+        stats.forEach(function (el, i) {
+            var raw = el.textContent.trim();
+            var hasComma = raw.indexOf(',') !== -1;
+            var target = parseInt(raw.replace(/,/g, ''), 10);
+            countUp(el, target, hasComma, 1500, i * 120);
+        });
+    }, { threshold: 0.7 });
+
+    observer.observe(statsRow);
+}());
+</script>
 </body>
 </html>
