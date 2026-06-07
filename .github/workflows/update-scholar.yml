@@ -45,7 +45,7 @@ jobs:
           for attempt in range(3):
               try:
                   author = scholarly.search_author_id('IgaW2DoAAAAJ')
-                  scholarly.fill(author, sections=['basics'])
+                  scholarly.fill(author, sections=['indices'])
                   break
               except Exception as exc:
                   print(f'Attempt {attempt + 1} failed: {exc}', file=sys.stderr)
