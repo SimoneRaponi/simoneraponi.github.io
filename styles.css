@@ -29,22 +29,40 @@ header {
     border-bottom: 1px solid #21262d;
 }
 
-.profile-pic {
-    width: 260px;
-    height: 260px;
-    border-radius: 50%;
-    object-fit: cover;
-    object-position: center 20%;
-    border: 3px solid #0ea5e9;
-    margin: 0 auto 22px;
-    display: block;
-    box-shadow: 0 0 24px rgba(14, 165, 233, 0.35);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+@keyframes border-flow {
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
 }
 
-.profile-pic:hover {
-    transform: scale(1.05);
-    box-shadow: 0 0 36px rgba(14, 165, 233, 0.55);
+.profile-frame {
+    display: inline-block;
+    margin-bottom: 28px;
+    padding: 2px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #0ea5e9, #6366f1, #22d3ee, #6366f1, #0ea5e9);
+    background-size: 300% 300%;
+    animation: border-flow 6s ease infinite;
+    box-shadow:
+        0 0 28px rgba(14, 165, 233, 0.22),
+        0 0 56px rgba(99, 102, 241, 0.10),
+        0 14px 44px rgba(0, 0, 0, 0.45);
+    transition: box-shadow 0.35s ease, transform 0.35s ease;
+}
+
+.profile-frame:hover {
+    transform: translateY(-5px);
+    box-shadow:
+        0 0 44px rgba(14, 165, 233, 0.42),
+        0 0 88px rgba(99, 102, 241, 0.22),
+        0 22px 56px rgba(0, 0, 0, 0.55);
+}
+
+.profile-pic {
+    display: block;
+    width: 260px;
+    height: auto;
+    border-radius: 14px;
 }
 
 h1 {
