@@ -786,6 +786,170 @@ a:hover {
     font-style: italic;
 }
 
+/* ── Right metrics panel ── */
+.right-panel {
+    position: fixed;
+    left: calc(50vw + 442px);
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 200;
+    display: flex;
+    flex-direction: column;
+    pointer-events: none;
+    padding-left: 24px;
+}
+
+.right-panel * { pointer-events: auto; }
+
+.right-panel::before {
+    content: '';
+    position: absolute;
+    left: 6px;
+    top: 12px;
+    bottom: 12px;
+    width: 1px;
+    background: repeating-linear-gradient(
+        to bottom,
+        rgba(14,165,233,0.0)  0px,
+        rgba(14,165,233,0.18) 8px,
+        rgba(14,165,233,0.06) 12px,
+        rgba(14,165,233,0.0)  20px,
+        rgba(14,165,233,0.18) 28px,
+        rgba(14,165,233,0.18) 36px,
+        rgba(14,165,233,0.0)  40px
+    );
+    background-size: 1px 40px;
+    animation: snav-flow 3s linear infinite;
+}
+
+@media (max-width: 1100px) {
+    .right-panel { display: none; }
+}
+
+.rpanel-areas {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.rpanel-area-title {
+    font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+    font-size: 0.65rem;
+    color: rgba(139, 148, 158, 0.45);
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+}
+
+.rpanel-area-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.rpanel-area-list {
+    gap: 6px;
+}
+
+.rpanel-area-list li {
+    font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.2px;
+    margin: 0;
+    cursor: default;
+    line-height: 1.4;
+}
+
+.rpanel-area-list li.done {
+    color: rgba(139, 148, 158, 0.45);
+    transition: color 0.2s;
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+}
+
+.rpanel-area-list li.done::before {
+    content: '✓';
+    color: #0ea5e9;
+    font-size: 0.6rem;
+    flex-shrink: 0;
+}
+
+.rpanel-area-list li.done:hover {
+    color: #c9d1d9;
+}
+
+.rpanel-area-list li.ongoing {
+    color: rgba(199, 209, 217, 0.75);
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-top: 4px;
+}
+
+.ongoing-track {
+    display: block;
+    height: 6px;
+    background: rgba(14, 165, 233, 0.12);
+    border-radius: 99px;
+    overflow: hidden;
+}
+
+.ongoing-fill {
+    display: block;
+    height: 100%;
+    width: 50%;
+    background: linear-gradient(90deg, #0ea5e9, #6366f1);
+    border-radius: 99px;
+    position: relative;
+    overflow: hidden;
+}
+
+.ongoing-fill::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -75%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.45), transparent);
+    animation: shimmer 2s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+    0%   { left: -75%; }
+    100% { left: 125%; }
+}
+
+.rpanel-sep {
+    height: 1px;
+    background: #21262d;
+    margin: 22px 0;
+}
+
+.rpanel-links {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.rpanel-links a {
+    font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+    font-size: 0.8rem;
+    color: rgba(139, 148, 158, 0.38);
+    text-decoration: none;
+    white-space: nowrap;
+    letter-spacing: 0.3px;
+    transition: color 0.25s;
+}
+
+.rpanel-links a:hover {
+    color: #58a6ff;
+    text-decoration: none;
+}
+
 /* ── Scroll progress bar ── */
 #scroll-progress {
     position: fixed;
