@@ -19,47 +19,49 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Install dependencies
+        run: |
+          sudo apt-get install -y tor privoxy
+          # Forward Privoxy → Tor SOCKS5
+          echo 'forward-socks5 / 127.0.0.1:9050 .' | sudo tee -a /etc/privoxy/config
+          sudo service tor start
+          sudo service privoxy start
+          # Wait for Tor to bootstrap
+          sleep 20
+
+      - name: Install scholarly
+        run: pip install scholarly
+
       - name: Fetch Scholar stats
         shell: python3 {0}
         run: |
-          import urllib.request, re, json, sys, os, time
+          import json, os, sys, time
           from datetime import date
+          from scholarly import scholarly, ProxyGenerator
 
-          USER    = 'IgaW2DoAAAAJ'
-          URL     = f'https://scholar.google.com/citations?user={USER}&hl=en'
-          HEADERS = {
-              'User-Agent': (
-                  'Mozilla/5.0 (X11; Linux x86_64) '
-                  'AppleWebKit/537.36 (KHTML, like Gecko) '
-                  'Chrome/124.0.0.0 Safari/537.36'
-              ),
-              'Accept-Language': 'en-US,en;q=0.9',
-          }
+          # Route scholarly through Privoxy → Tor
+          pg = ProxyGenerator()
+          pg.SingleProxy(http='http://127.0.0.1:8118', https='http://127.0.0.1:8118')
+          scholarly.use_proxy(pg)
 
-          html = None
+          author = None
           for attempt in range(3):
               try:
-                  req  = urllib.request.Request(URL, headers=HEADERS)
-                  html = urllib.request.urlopen(req, timeout=20).read().decode('utf-8')
+                  author = scholarly.search_author_id('IgaW2DoAAAAJ')
+                  scholarly.fill(author, sections=['basics'])
                   break
               except Exception as exc:
                   print(f'Attempt {attempt + 1} failed: {exc}', file=sys.stderr)
                   if attempt < 2:
-                      time.sleep(20)
+                      time.sleep(30)
 
-          if html is None:
-              sys.exit(1)
-
-          # Stats table cells come in pairs (all-time, since-year) per row:
-          # row 0 = Citations, row 1 = h-index, row 2 = i10-index
-          vals = re.findall(r'<td class="gsc_rsb_std">(\d+)</td>', html)
-          if len(vals) < 3:
-              print(f'Unexpected HTML — found cells: {vals}', file=sys.stderr)
+          if author is None:
+              print('All attempts failed', file=sys.stderr)
               sys.exit(1)
 
           data = {
-              'citations': int(vals[0]),
-              'hindex':    int(vals[2]),
+              'citations': author.get('citedby', 0),
+              'hindex':    author.get('hindex', 0),
               'updated':   date.today().isoformat(),
           }
 
