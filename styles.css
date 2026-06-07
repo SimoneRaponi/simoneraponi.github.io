@@ -713,6 +713,67 @@ a:hover {
     .side-nav { display: none; }
 }
 
+/* ── Signal CTA ── */
+.signal-card {
+    padding: 40px 44px;
+    text-align: center;
+    border-radius: 14px;
+    background: linear-gradient(135deg, rgba(14, 165, 233, 0.05) 0%, rgba(99, 102, 241, 0.05) 100%);
+    border: 1px solid rgba(14, 165, 233, 0.18);
+    position: relative;
+}
+
+.signal-card::before {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: 14%;
+    right: 14%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #0ea5e9, #6366f1, transparent);
+}
+
+.signal-headline {
+    font-size: 1.45rem;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+    background: linear-gradient(120deg, #e6edf3 30%, #0ea5e9 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin: 0 0 16px;
+}
+
+.signal-body {
+    color: #8b949e;
+    font-size: 0.925rem;
+    line-height: 1.8;
+    max-width: 520px;
+    margin: 0 auto 30px;
+}
+
+.signal-btn {
+    display: inline-block;
+    padding: 12px 30px;
+    background: linear-gradient(135deg, #0ea5e9 0%, #6366f1 100%);
+    color: #fff;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    letter-spacing: 0.2px;
+    box-shadow: 0 4px 18px rgba(14, 165, 233, 0.25);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+}
+
+.signal-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 30px rgba(14, 165, 233, 0.42);
+    opacity: 0.92;
+    text-decoration: none;
+    color: #fff;
+}
+
 /* ── Responsive ── */
 @media (max-width: 680px) {
     .container {
