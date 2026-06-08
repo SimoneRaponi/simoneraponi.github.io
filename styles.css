@@ -41,7 +41,7 @@ header {
 
 .profile-pic {
     display: block;
-    width: 280px;
+    width: 175px;
     height: auto;
     -webkit-mask-image: radial-gradient(
         ellipse 82% 90% at 50% 38%,
