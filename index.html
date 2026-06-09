@@ -1233,7 +1233,7 @@
     setTimeout(type, 650);
 }());
 
-/* ── Custom magnetic cursor (desktop only) ── */
+/* ── Custom cursor: dot + ring (desktop only) ── */
 (function () {
     if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
 
@@ -1243,14 +1243,18 @@
     var ring = document.getElementById('cursor-ring');
     if (!dot || !ring) return;
 
-    var mx = 0, my = 0, rx = 0, ry = 0, shown = false;
+    var tx = 0, ty = 0;   /* target (exact mouse) */
+    var rx = 0, ry = 0;   /* ring current position */
+    var shown = false;
+    var LERP = 0.12;
 
     document.addEventListener('mousemove', function (e) {
-        mx = e.clientX;
-        my = e.clientY;
-        dot.style.left = mx + 'px';
-        dot.style.top  = my + 'px';
+        tx = e.clientX;
+        ty = e.clientY;
+        dot.style.left = tx + 'px';
+        dot.style.top  = ty + 'px';
         if (!shown) {
+            rx = tx; ry = ty;
             dot.style.opacity  = '1';
             ring.style.opacity = '1';
             shown = true;
@@ -1258,17 +1262,12 @@
     });
 
     (function animRing() {
-        rx += (mx - rx) * 0.12;
-        ry += (my - ry) * 0.12;
+        rx += (tx - rx) * LERP;
+        ry += (ty - ry) * LERP;
         ring.style.left = rx + 'px';
         ring.style.top  = ry + 'px';
         requestAnimationFrame(animRing);
     }());
-
-    document.querySelectorAll('a, button').forEach(function (el) {
-        el.addEventListener('mouseenter', function () { ring.classList.add('cursor-hover'); });
-        el.addEventListener('mouseleave', function () { ring.classList.remove('cursor-hover'); });
-    });
 
     document.addEventListener('mouseleave', function () {
         dot.style.opacity  = '0';
