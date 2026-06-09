@@ -1,3 +1,7 @@
+html {
+    font-size: 18.3px;
+}
+
 *, *::before, *::after {
     box-sizing: border-box;
 }
@@ -446,7 +450,6 @@ a:hover {
     background: #0d1117;
     border-radius: 8px;
     border: 1px solid #30363d;
-    border-left: 3px solid #0ea5e9;
     transition: box-shadow 0.2s ease;
     margin: 0;
 }
@@ -531,7 +534,6 @@ a:hover {
     background: #0d1117;
     border-radius: 8px;
     border: 1px solid #30363d;
-    border-left: 3px solid #0ea5e9;
     font-size: 0.875rem;
     line-height: 1.6;
     color: #c9d1d9;
@@ -880,10 +882,7 @@ a:hover {
     font-size: 1.45rem;
     font-weight: 700;
     letter-spacing: -0.3px;
-    background: linear-gradient(120deg, #e6edf3 30%, #0ea5e9 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: #ffffff;
     margin: 0 0 16px;
 }
 
