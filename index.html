@@ -33,9 +33,9 @@
             A decade of bringing <strong>AI&thinsp;&amp;&thinsp;ML</strong> to adversarial problems at the extremes,
             from criminal networks and critical infrastructure to satellite systems and the ocean floor.
             One question drives it all: where can intelligent systems make the decisive difference?
-            <em>Click any entry below to find out.</em>
         </p>
 
+        <p class="bio-accordion-label">My career at a glance</p>
         <div class="bio-accordion">
 
             <div class="bio-item">
@@ -250,13 +250,6 @@
         </div>
     </header>
 
-    <section class="links">
-        <a href="#" data-m>Send me an email</a>
-        <a href="data/simone_raponi_cv.pdf" download>Download CV</a>
-        <a href="https://scholar.google.it/citations?hl=en&user=IgaW2DoAAAAJ">Google Scholar</a>
-        <a href="https://github.com/SimoneRaponi">GitHub</a>
-        <a href="https://www.linkedin.com/in/simone-raponi">LinkedIn</a>
-    </section>
 
 
     <section id="latest-news">
@@ -811,7 +804,7 @@
 
 <aside class="right-panel" aria-label="Research areas and contact">
     <div class="rpanel-areas">
-        <span class="rpanel-area-title">Deployed In</span>
+        <span class="rpanel-area-title">Where I've applied AI</span>
         <ul class="rpanel-area-list">
             <li class="done">AI 4 Cyberspace</li>
             <li class="done">AI 4 Maritime Security</li>
@@ -838,6 +831,7 @@
     <div class="rpanel-sep"></div>
     <div class="rpanel-links">
         <a href="#" data-m>Send me an email</a>
+        <a href="data/simone_raponi_cv.pdf" download>Download my CV</a>
         <a href="https://scholar.google.it/citations?hl=en&user=IgaW2DoAAAAJ" target="_blank" rel="noopener">Scholar</a>
         <a href="https://github.com/SimoneRaponi" target="_blank" rel="noopener">GitHub</a>
         <a href="https://www.linkedin.com/in/simone-raponi" target="_blank" rel="noopener">LinkedIn</a>
@@ -905,6 +899,40 @@
         ul.appendChild(li);
     });
     nav.appendChild(ul);
+
+    /* Ease-out smooth scroll */
+    function smoothScrollTo(targetY, duration) {
+        var startY    = window.scrollY;
+        var diff      = targetY - startY;
+        if (diff === 0) return;
+        var startTime = null;
+        function step(ts) {
+            if (!startTime) startTime = ts;
+            var t    = Math.min((ts - startTime) / duration, 1);
+            var ease = 1 - Math.pow(1 - t, 5); /* quintic ease-out: fast start, very slow finish */
+            window.scrollTo(0, startY + diff * ease);
+            if (t < 1) requestAnimationFrame(step);
+        }
+        requestAnimationFrame(step);
+    }
+
+    nav.addEventListener('click', function (e) {
+        var a = e.target.closest('a[href^="#"]');
+        if (!a) return;
+        e.preventDefault();
+        var id = a.getAttribute('href').slice(1);
+        var targetY;
+        if (id === 'top') {
+            targetY = 0;
+        } else {
+            var el = document.getElementById(id);
+            if (!el) return;
+            targetY = Math.max(0, el.getBoundingClientRect().top + window.scrollY - 20);
+        }
+        var dist = Math.abs(targetY - window.scrollY);
+        var dur  = Math.min(Math.max(dist * 0.7, 700), 1500);
+        smoothScrollTo(targetY, dur);
+    });
 
     /* Scroll tracking */
     function getActive() {

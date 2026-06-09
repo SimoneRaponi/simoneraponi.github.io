@@ -91,6 +91,17 @@ h1 {
 }
 
 /* ── Bio accordion ── */
+.bio-accordion-label {
+    font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: rgba(255,255,255,0.75);
+    text-align: left;
+    max-width: 720px;
+    margin: 18px auto 6px;
+}
+
 .bio-accordion {
     max-width: 720px;
     margin: 8px auto 0;
@@ -980,10 +991,10 @@ a:hover {
 
 .rpanel-area-title {
     font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
-    font-size: 0.65rem;
-    color: rgba(139, 148, 158, 0.45);
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.82);
     text-transform: uppercase;
-    letter-spacing: 1.2px;
+    letter-spacing: 1.0px;
 }
 
 .rpanel-area-list {
@@ -1080,8 +1091,8 @@ a:hover {
 
 .rpanel-links a {
     font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
-    font-size: 0.8rem;
-    color: rgba(139, 148, 158, 0.65);
+    font-size: 0.95rem;
+    color: rgba(255, 255, 255, 0.82);
     text-decoration: none;
     white-space: nowrap;
     letter-spacing: 0.3px;
@@ -1325,8 +1336,8 @@ h1 { animation: text-glitch 5s 0.9s both; }
     0%   { color: rgba(139,148,158,0.12); text-shadow: none; }
     16%  { color: rgba(139,148,158,0.12); text-shadow: none; }
     20%  { color: rgba(186,230,253,0.95); text-shadow: 0 0 7px rgba(14,165,233,0.7), 0 0 18px rgba(14,165,233,0.3); }
-    24%  { color: rgba(139,148,158,0.45); text-shadow: none; }
-    100% { color: rgba(139,148,158,0.45); text-shadow: none; }
+    28%  { color: rgba(186,230,253,0.72); text-shadow: none; }
+    100% { color: rgba(186,230,253,0.72); text-shadow: none; }
 }
 
 @keyframes fill-progress {
