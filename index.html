@@ -236,11 +236,11 @@
                 <span class="stat-label">Citations</span>
             </div>
             <div class="stat">
-                <span class="stat-num">1</span>
+                <span class="stat-num" id="stat-books">1</span>
                 <span class="stat-label">Book</span>
             </div>
             <div class="stat">
-                <span class="stat-num">23</span>
+                <span class="stat-num" id="stat-papers">23</span>
                 <span class="stat-label">Papers</span>
             </div>
             <div class="stat">
@@ -450,7 +450,7 @@
 
     <section id="publications">
         <h2>Publications</h2>
-        <p class="section-subtitle"><strong>1 book &nbsp;·&nbsp; 11 journal papers &nbsp;·&nbsp; 12 conference papers</strong></p>
+        <p class="section-subtitle" id="pub-subtitle"><strong>1 book &nbsp;·&nbsp; 11 journal papers &nbsp;·&nbsp; 12 conference papers</strong></p>
 
         <h3 class="pub-section-title" id="pub-book">Book</h3>
         <ul class="publications-list">
@@ -1174,6 +1174,32 @@
             if (data[key] != null) el.textContent = data[key].toLocaleString('en-US');
         });
     });
+}());
+
+/* ── Publication counter (dynamic) ── */
+(function () {
+    var bookH     = document.getElementById('pub-book');
+    var journalH  = document.getElementById('pub-journals');
+    var confH     = document.getElementById('pub-conferences');
+    if (!bookH || !journalH || !confH) return;
+
+    var books    = bookH.nextElementSibling.querySelectorAll('li').length;
+    var journals = journalH.nextElementSibling.querySelectorAll('li').length;
+    var confs    = confH.nextElementSibling.querySelectorAll('li').length;
+    var total    = journals + confs;
+
+    var bookEl   = document.getElementById('stat-books');
+    if (bookEl) bookEl.textContent = String(books);
+
+    var statEl   = document.getElementById('stat-papers');
+    if (statEl) statEl.textContent = String(total);
+
+    var subtitleEl = document.getElementById('pub-subtitle');
+    if (subtitleEl) {
+        subtitleEl.innerHTML = '<strong>' + books + ' book' + (books !== 1 ? 's' : '') +
+            ' &nbsp;&middot;&nbsp; ' + journals +
+            ' journal papers &nbsp;&middot;&nbsp; ' + confs + ' conference papers</strong>';
+    }
 }());
 </script>
 
