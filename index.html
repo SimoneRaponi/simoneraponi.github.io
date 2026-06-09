@@ -811,7 +811,7 @@
 
 <aside class="right-panel" aria-label="Research areas and contact">
     <div class="rpanel-areas">
-        <span class="rpanel-area-title">Areas</span>
+        <span class="rpanel-area-title">Deployed In</span>
         <ul class="rpanel-area-list">
             <li class="done">AI 4 Cyberspace</li>
             <li class="done">AI 4 Maritime Security</li>
@@ -827,11 +827,8 @@
             <li class="done">AI 4 Digital Forensics</li>
             <li class="done">AI 4 Computer Vision</li>
             <li class="done">AI 4 API Security</li>
-            <li class="done">AI 4 LLM Security</li>
             <li class="done">AI 4 Privacy</li>
-            <li class="done">AI 4 Blockchain</li>
             <li class="done">AI 4 IoT</li>
-            <li class="done">AI 4 Education</li>
             <li class="ongoing">
                 AI 4 a Better World
                 <span class="ongoing-track"><span class="ongoing-fill"></span></span>
@@ -1199,16 +1196,8 @@
     }());
 
     document.querySelectorAll('a, button').forEach(function (el) {
-        el.addEventListener('mouseenter', function () {
-            ring.style.width       = '42px';
-            ring.style.height      = '42px';
-            ring.style.borderColor = 'rgba(14,165,233,0.85)';
-        });
-        el.addEventListener('mouseleave', function () {
-            ring.style.width       = '28px';
-            ring.style.height      = '28px';
-            ring.style.borderColor = 'rgba(14,165,233,0.45)';
-        });
+        el.addEventListener('mouseenter', function () { ring.classList.add('cursor-hover'); });
+        el.addEventListener('mouseleave', function () { ring.classList.remove('cursor-hover'); });
     });
 
     document.addEventListener('mouseleave', function () {
@@ -1247,11 +1236,54 @@
     });
 }());
 
-/* ── Right-panel list stagger entrance ── */
+/* ── Right-panel list entrance + river wave ── */
 (function () {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    document.querySelectorAll('.rpanel-area-list li.done').forEach(function (li, i) {
-        li.style.animationDelay = (300 + i * 75) + 'ms';
+
+    var list  = document.querySelector('.rpanel-area-list');
+    var items = list.querySelectorAll('li.done');
+    var N     = items.length;
+    var T     = 8;    // wave period in seconds
+    var glow  = 0.20; // glow peaks at 20% of the cycle
+    var start = 2.0;  // seconds before the first wave starts
+
+    items.forEach(function (li, i) {
+        var enter = 300 + i * 75;
+        var wave  = start + i * (T / N) - T * glow;
+        li.style.animationName           = 'list-item-in, area-wave';
+        li.style.animationDuration       = '0.35s, ' + T + 's';
+        li.style.animationDelay          = enter + 'ms, ' + wave + 's';
+        li.style.animationFillMode       = 'both, both';
+        li.style.animationIterationCount = '1, 1';
+        li.style.animationTimingFunction = 'ease, linear';
+    });
+
+    // Ongoing item: glow + bar fill when wave arrives
+    var barDelay = start + T;
+    var ongoing  = list.querySelector('li.ongoing');
+    var fill     = list.querySelector('.ongoing-fill');
+    if (ongoing) {
+        ongoing.style.animation = 'ongoing-glow 1.2s ease-out ' + barDelay + 's both';
+    }
+    if (fill) {
+        fill.style.width      = '0';
+        fill.style.transition = 'none';
+        fill.style.animation  = 'fill-progress 2.5s ease-out ' + barDelay + 's forwards';
+    }
+
+    list.style.position = 'relative';
+    var beam = document.createElement('div');
+    beam.className = 'area-beam';
+    list.appendChild(beam);
+
+    requestAnimationFrame(function () {
+        var h = list.getBoundingClientRect().height - 28;
+        beam.style.setProperty('--beam-travel', h + 'px');
+        beam.style.animationName           = 'area-beam-drop';
+        beam.style.animationDuration       = T + 's';
+        beam.style.animationDelay          = start + 's';
+        beam.style.animationTimingFunction = 'linear';
+        beam.style.animationIterationCount = '1';
     });
 }());
 
