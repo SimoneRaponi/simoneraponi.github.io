@@ -512,14 +512,11 @@ a:hover {
 }
 
 .year-highlight {
-    background: #161b22;
-    border: 1px solid #30363d;
-    border-radius: 6px;
-    padding: 2px 9px;
-    font-weight: 600;
-    color: #0ea5e9;
-    font-size: 0.72rem;
+    font-weight: 400;
+    color: #38bdf8;
+    font-size: 0.7rem;
     font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+    letter-spacing: 0.04em;
     flex-shrink: 0;
     white-space: nowrap;
 }
@@ -528,6 +525,13 @@ a:hover {
     font-weight: 600;
     color: #e6edf3;
     font-size: 0.95rem;
+}
+
+.company-location {
+    font-weight: 400;
+    color: rgba(255,255,255,0.32);
+    font-size: 0.85em;
+    letter-spacing: 0.01em;
 }
 
 /* ── Funded Grants ── */
