@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://simoneraponi.github.io/sitemap.xml

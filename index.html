@@ -9,23 +9,45 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%230ea5e9'/><text x='16' y='16' dominant-baseline='central' text-anchor='middle' fill='white' font-family='sans-serif' font-weight='700' font-size='15'>SR</text></svg>">
+    <meta property="og:type"         content="profile" />
+    <meta property="og:title"        content="Simone Raponi — AI &amp; Cybersecurity Researcher" />
+    <meta property="og:description"  content="AI and Cybersecurity researcher. H-Index 16, 1,615 citations, 23 publications, 2 patents, 1 book." />
+    <meta property="og:url"          content="https://simoneraponi.github.io/" />
+    <meta name="twitter:card"        content="summary" />
+    <meta name="twitter:title"       content="Simone Raponi — AI &amp; Cybersecurity Researcher" />
+    <meta name="twitter:description" content="AI and Cybersecurity researcher. H-Index 16, 1,615 citations, 23 publications, 2 patents, 1 book." />
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Simone Raponi",
+      "jobTitle": "AI & Cybersecurity Researcher",
+      "url": "https://simoneraponi.github.io/",
+      "sameAs": [
+        "https://scholar.google.it/citations?hl=en&user=IgaW2DoAAAAJ",
+        "https://github.com/SimoneRaponi",
+        "https://www.linkedin.com/in/simone-raponi"
+      ],
+      "worksFor": { "@type": "Organization", "name": "WSENSE" },
+      "knowsAbout": ["Artificial Intelligence","Cybersecurity","Machine Learning","Underwater Networking","Maritime Security","Intrusion Detection"]
+    }
+    </script>
 </head>
 <body>
-<div id="scroll-progress"></div>
 <div id="cursor-dot"></div>
 <div id="cursor-ring"></div>
+<div id="scroll-progress"></div>
 <nav id="side-nav" class="side-nav" aria-label="Page navigation"></nav>
 
 <div class="container">
 
     <header id="top">
         <div class="hero-top">
-            <div class="profile-frame">
-                <img src="./img/simo_new.jpg" alt="Simone Raponi" class="profile-pic">
-            </div>
             <div class="hero-text">
                 <h1>Simone Raponi</h1>
                 <p class="tagline">AI &amp; Cybersecurity &nbsp;·&nbsp; From the Dark Web to the Deep Sea</p>
+                <span class="collab-badge"><span class="collab-dot"></span>Open to collaborations</span>
             </div>
         </div>
 
@@ -1245,53 +1267,6 @@
     setTimeout(type, 650);
 }());
 
-/* ── Custom cursor: dot + ring (desktop only) ── */
-(function () {
-    if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
-
-    document.body.classList.add('custom-cursor');
-
-    var dot  = document.getElementById('cursor-dot');
-    var ring = document.getElementById('cursor-ring');
-    if (!dot || !ring) return;
-
-    var tx = 0, ty = 0;   /* target (exact mouse) */
-    var rx = 0, ry = 0;   /* ring current position */
-    var shown = false;
-    var LERP = 0.12;
-
-    document.addEventListener('mousemove', function (e) {
-        tx = e.clientX;
-        ty = e.clientY;
-        dot.style.left = tx + 'px';
-        dot.style.top  = ty + 'px';
-        if (!shown) {
-            rx = tx; ry = ty;
-            dot.style.opacity  = '1';
-            ring.style.opacity = '1';
-            shown = true;
-        }
-    });
-
-    (function animRing() {
-        rx += (tx - rx) * LERP;
-        ry += (ty - ry) * LERP;
-        ring.style.left = rx + 'px';
-        ring.style.top  = ry + 'px';
-        requestAnimationFrame(animRing);
-    }());
-
-    document.addEventListener('mouseleave', function () {
-        dot.style.opacity  = '0';
-        ring.style.opacity = '0';
-    });
-    document.addEventListener('mouseenter', function () {
-        if (shown) {
-            dot.style.opacity  = '1';
-            ring.style.opacity = '1';
-        }
-    });
-}());
 
 /* ── Bio accordion ── */
 (function () {
@@ -1365,6 +1340,54 @@
         beam.style.animationDelay          = start + 's';
         beam.style.animationTimingFunction = 'linear';
         beam.style.animationIterationCount = '1';
+    });
+}());
+
+/* ── Custom cursor: dot + ring (desktop only) ── */
+(function () {
+    if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+
+    document.body.classList.add('custom-cursor');
+
+    var dot  = document.getElementById('cursor-dot');
+    var ring = document.getElementById('cursor-ring');
+    if (!dot || !ring) return;
+
+    var tx = 0, ty = 0;   /* target (exact mouse) */
+    var rx = 0, ry = 0;   /* ring current position */
+    var shown = false;
+    var LERP = 0.12;
+
+    document.addEventListener('mousemove', function (e) {
+        tx = e.clientX;
+        ty = e.clientY;
+        dot.style.left = tx + 'px';
+        dot.style.top  = ty + 'px';
+        if (!shown) {
+            rx = tx; ry = ty;
+            dot.style.opacity  = '1';
+            ring.style.opacity = '1';
+            shown = true;
+        }
+    });
+
+    (function animRing() {
+        rx += (tx - rx) * LERP;
+        ry += (ty - ry) * LERP;
+        ring.style.left = rx + 'px';
+        ring.style.top  = ry + 'px';
+        requestAnimationFrame(animRing);
+    }());
+
+    document.addEventListener('mouseleave', function () {
+        dot.style.opacity  = '0';
+        ring.style.opacity = '0';
+    });
+    document.addEventListener('mouseenter', function () {
+        if (shown) {
+            dot.style.opacity  = '1';
+            ring.style.opacity = '1';
+        }
     });
 }());
 
