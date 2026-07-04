@@ -1340,30 +1340,6 @@ h1 { animation: text-glitch 5s 0.9s both; }
     100% { color: rgba(199,209,217,0.75); text-shadow: none; }
 }
 
-@keyframes area-beam-drop {
-    0%        { transform: translateY(0); opacity: 0; }
-    4%        { opacity: 1; }
-    86%       { opacity: 0.85; }
-    95%, 100% { transform: translateY(var(--beam-travel, 300px)); opacity: 0; }
-}
-
-.area-beam {
-    position: absolute;
-    left: -8px;
-    right: -8px;
-    height: 28px;
-    top: 0;
-    background: radial-gradient(ellipse 80% 100% at 50% 50%,
-        rgba(14,165,233,0.16) 0%,
-        rgba(14,165,233,0.06) 55%,
-        transparent 100%
-    );
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 0;
-}
-
-
 /* ── Reduced motion: disable new animations ── */
 @media (prefers-reduced-motion: reduce) {
     h1 { animation: none; }

@@ -1326,21 +1326,6 @@
         fill.style.transition = 'none';
         fill.style.animation  = 'fill-progress 2.5s ease-out ' + barDelay + 's forwards';
     }
-
-    list.style.position = 'relative';
-    var beam = document.createElement('div');
-    beam.className = 'area-beam';
-    list.appendChild(beam);
-
-    requestAnimationFrame(function () {
-        var h = list.getBoundingClientRect().height - 28;
-        beam.style.setProperty('--beam-travel', h + 'px');
-        beam.style.animationName           = 'area-beam-drop';
-        beam.style.animationDuration       = T + 's';
-        beam.style.animationDelay          = start + 's';
-        beam.style.animationTimingFunction = 'linear';
-        beam.style.animationIterationCount = '1';
-    });
 }());
 
 /* ── Custom cursor: dot + ring (desktop only) ── */
