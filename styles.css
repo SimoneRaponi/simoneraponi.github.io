@@ -260,13 +260,7 @@ h1 {
     padding: var(--sp-2) 10px;
     border-left: 2px solid rgba(var(--accent-rgb),0.22);
     border-radius: 0 4px 4px 0;
-    transition: border-color 0.2s;
 }
-
-.rg-item:hover {
-    border-left-color: var(--accent);
-}
-
 
 .rg-key {
     font-size: var(--fs-500);
@@ -341,13 +335,7 @@ header p {
     border-radius: 10px;
     border: 1px solid var(--border);
     min-width: 90px;
-    transition: border-color 0.2s ease, transform 0.2s ease;
     cursor: default;
-}
-
-.stat:hover {
-    border-color: var(--accent);
-    transform: translateY(-2px);
 }
 
 .stat-num {
@@ -872,7 +860,6 @@ a:hover {
 }
 
 .signal-btn:hover {
-    background: rgba(var(--accent-rgb),0.1);
     border-color: var(--accent);
     color: var(--accent);
     text-decoration: none;
