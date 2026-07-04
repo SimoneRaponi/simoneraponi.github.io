@@ -35,8 +35,6 @@
     </script>
 </head>
 <body>
-<div id="cursor-dot"></div>
-<div id="cursor-ring"></div>
 <div id="scroll-progress"></div>
 <nav id="side-nav" class="side-nav" aria-label="Page navigation"></nav>
 
@@ -999,12 +997,20 @@
         return { section: section, sub: sub };
     }
 
+    function setActiveLink(el, isActive) {
+        el.classList.toggle('active', isActive);
+        var link = el.querySelector('a');
+        if (!link) return;
+        if (isActive) link.setAttribute('aria-current', 'true');
+        else link.removeAttribute('aria-current');
+    }
+
     function applyActive(active) {
         document.querySelectorAll('.side-nav-item').forEach(function(el) {
-            el.classList.toggle('active', el.dataset.section === active.section);
+            setActiveLink(el, el.dataset.section === active.section);
         });
         document.querySelectorAll('.side-nav-subs li').forEach(function(el) {
-            el.classList.toggle('active', !!active.sub && el.dataset.section === active.sub);
+            setActiveLink(el, !!active.sub && el.dataset.section === active.sub);
         });
     }
 
@@ -1088,7 +1094,12 @@
         var active = getActive();
         if (active === current) return;
         current = active;
-        dots.forEach(function (d, i) { d.classList.toggle('active', i === active); });
+        dots.forEach(function (d, i) {
+            var isActive = i === active;
+            d.classList.toggle('active', isActive);
+            if (isActive) d.setAttribute('aria-current', 'true');
+            else d.removeAttribute('aria-current');
+        });
         labelEl.textContent = SECTIONS[active].label;
     }
 
@@ -1326,54 +1337,6 @@
         fill.style.transition = 'none';
         fill.style.animation  = 'fill-progress 2.5s ease-out ' + barDelay + 's forwards';
     }
-}());
-
-/* ── Custom cursor: dot + ring (desktop only) ── */
-(function () {
-    if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
-
-    document.body.classList.add('custom-cursor');
-
-    var dot  = document.getElementById('cursor-dot');
-    var ring = document.getElementById('cursor-ring');
-    if (!dot || !ring) return;
-
-    var tx = 0, ty = 0;   /* target (exact mouse) */
-    var rx = 0, ry = 0;   /* ring current position */
-    var shown = false;
-    var LERP = 0.12;
-
-    document.addEventListener('mousemove', function (e) {
-        tx = e.clientX;
-        ty = e.clientY;
-        dot.style.left = tx + 'px';
-        dot.style.top  = ty + 'px';
-        if (!shown) {
-            rx = tx; ry = ty;
-            dot.style.opacity  = '1';
-            ring.style.opacity = '1';
-            shown = true;
-        }
-    });
-
-    (function animRing() {
-        rx += (tx - rx) * LERP;
-        ry += (ty - ry) * LERP;
-        ring.style.left = rx + 'px';
-        ring.style.top  = ry + 'px';
-        requestAnimationFrame(animRing);
-    }());
-
-    document.addEventListener('mouseleave', function () {
-        dot.style.opacity  = '0';
-        ring.style.opacity = '0';
-    });
-    document.addEventListener('mouseenter', function () {
-        if (shown) {
-            dot.style.opacity  = '1';
-            ring.style.opacity = '1';
-        }
-    });
 }());
 
 /* ── Email obfuscation ── */
