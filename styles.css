@@ -377,6 +377,7 @@ header p {
     border: 1px solid var(--border);
     background: var(--border-subtle);
     transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .links a:first-child {
@@ -956,6 +957,7 @@ a:hover {
     font-size: var(--fs-600);
     letter-spacing: 0.2px;
     transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .signal-btn:hover {
@@ -1193,29 +1195,39 @@ a:hover {
 .mnav-dots {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 6px;
 }
 
+/* .mnav-dot is the full tap target (26px, close to the ~44px touch
+   guideline given eight of them share one row); the small ring/dot itself
+   is a centered ::before so the visible size doesn't have to match the
+   tappable size. */
 .mnav-dot {
+    width: 26px;
+    height: 26px;
+    padding: 0;
+    background: none;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    -webkit-tap-highlight-color: transparent;
+    position: relative;
+}
+
+.mnav-dot::before {
+    content: '';
     width: 7px;
     height: 7px;
     border-radius: 50%;
     background: transparent;
     border: 1.5px solid rgba(var(--accent-rgb), 0.22);
-    cursor: pointer;
     transition: background 0.3s, border-color 0.3s, transform 0.3s, box-shadow 0.3s;
-    -webkit-tap-highlight-color: transparent;
-    padding: 0;
-    position: relative;
 }
 
-.mnav-dot::after {
-    content: '';
-    position: absolute;
-    inset: -8px; /* larger tap target */
-}
-
-.mnav-dot.active {
+.mnav-dot.active::before {
     background: var(--accent);
     border-color: var(--accent);
     box-shadow: 0 0 8px rgba(var(--accent-rgb),0.8);
@@ -1226,8 +1238,8 @@ a:hover {
     background: none;
     border: 1.5px solid rgba(var(--accent-rgb), 0.22);
     border-radius: 50%;
-    width: 26px;
-    height: 26px;
+    width: 34px;
+    height: 34px;
     color: var(--text-muted);
     font-size: var(--fs-600);
     line-height: 1;
@@ -1329,16 +1341,21 @@ body::after {
 }
 
 /* ── Responsive ── */
+/* Intermediate step: tablets/phablets/narrow laptops get less padding than
+   desktop well before the mobile breakpoint, instead of jumping straight
+   from 60px to 18px. */
+@media (max-width: 900px) {
+    .container {
+        padding: 36px 40px;
+    }
+}
+
 @media (max-width: 680px) {
     .container {
         padding: 28px 18px;
         border-radius: 0;
         border-left: none;
         border-right: none;
-    }
-
-    h1 {
-        font-size: var(--fs-1000);
     }
 
     .stat-num {
@@ -1405,6 +1422,7 @@ body::after {
         cursor: pointer;
         user-select: none;
         -webkit-user-select: none;
+        -webkit-tap-highlight-color: transparent;
     }
     .pub-section-title::after {
         content: '▾';
@@ -1428,6 +1446,12 @@ body::after {
         transition: max-height 0.6s ease;
     }
     .research-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* Below ~480px, two columns squeeze the longer research descriptions into
+   unreadably narrow strips — one column reads far better. */
+@media (max-width: 480px) {
+    .research-grid { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 400px) {
