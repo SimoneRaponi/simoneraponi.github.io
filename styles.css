@@ -217,7 +217,9 @@ h1 {
 }
 
 .bio-body.open {
-    max-height: 900px;
+    /* Generous ceiling: the "Research" item alone has 15 entries and, at
+       a single mobile column, can exceed 1500px — must never clip. */
+    max-height: 2600px;
     transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -261,6 +263,10 @@ h1 {
     border-left: 2px solid rgba(var(--accent-rgb),0.22);
     border-radius: 0 4px 4px 0;
     transition: border-color 0.2s;
+}
+
+.rg-item:hover {
+    border-left-color: var(--accent);
 }
 
 
@@ -341,6 +347,10 @@ header p {
     cursor: default;
 }
 
+.stat:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+}
 
 .stat-num {
     font-size: var(--fs-900);
@@ -967,6 +977,36 @@ a:hover {
     text-decoration: none;
 }
 
+.signal-actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.copy-email-btn {
+    display: inline-block;
+    padding: 11px 20px;
+    background: none;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    color: var(--text-muted);
+    font-family: inherit;
+    font-size: var(--fs-600);
+    font-weight: 500;
+    letter-spacing: 0.2px;
+    cursor: pointer;
+    transition: border-color 0.2s ease, color 0.2s ease;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.copy-email-btn:hover,
+.copy-email-btn.copied {
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
 /* ── Disclosure footer ── */
 .disclosure {
     margin-top: 60px;
@@ -1396,8 +1436,12 @@ body::after {
     .signal-card   { padding: 28px 22px; }
     .signal-headline { font-size: var(--fs-800); }
 
-    /* Signal button full-width on mobile */
-    .signal-btn {
+    /* Signal actions stack full-width on mobile */
+    .signal-actions {
+        flex-direction: column;
+    }
+    .signal-btn,
+    .copy-email-btn {
         display: block;
         width: 100%;
         box-sizing: border-box;
@@ -1484,4 +1528,92 @@ a[href^="http"]::after {
     outline: 2px solid var(--accent);
     outline-offset: 3px;
     border-radius: 3px;
+}
+
+/* ── Skip link: hidden until focused, lets keyboard users bypass the
+   side navigation and jump straight to the main content ── */
+.skip-link {
+    position: absolute;
+    left: -9999px;
+    top: 0;
+    z-index: 2000;
+    background: var(--accent);
+    color: #04141c;
+    font-weight: 600;
+    padding: 12px 20px;
+    border-radius: 0 0 8px 0;
+}
+
+.skip-link:focus {
+    left: 0;
+}
+
+/* ── Print: a printed page should be a complete, clean reference —
+   not a snapshot of whatever was open/scrolled on screen. Because the
+   whole site already runs on custom properties, re-theming to print
+   colors here cascades through virtually every rule for free. ── */
+@media print {
+    :root {
+        --bg: #ffffff;
+        --surface: #ffffff;
+        --border: #cccccc;
+        --border-subtle: #e5e5e5;
+        --text: #222222;
+        --text-bright: #000000;
+        --text-muted: #555555;
+        --text-muted-rgb: 85, 85, 85;
+        --accent: #0369a1;
+        --accent-light: #0369a1;
+        --accent-dark: #0369a1;
+        --accent-rgb: 3, 105, 161;
+    }
+
+    .side-nav,
+    .right-panel,
+    .mobile-nav,
+    #scroll-progress,
+    .skip-link,
+    .tw-cursor,
+    body::after,
+    h2::after,
+    a[href^="http"]::after {
+        display: none !important;
+    }
+
+    body { background: #fff; padding: 0; }
+
+    .container {
+        max-width: 100%;
+        padding: 0;
+        border: none;
+        border-radius: 0;
+        box-shadow: none;
+    }
+
+    a { text-decoration: underline; }
+
+    /* Force every collapsed/deferred bit of content open — nothing should
+       be missing from the printed page just because it wasn't clicked or
+       scrolled into view on screen. */
+    .bio-body {
+        max-height: none !important;
+        overflow: visible !important;
+    }
+    .bio-body p,
+    .research-grid {
+        opacity: 1 !important;
+        transform: none !important;
+    }
+    .bio-arrow { display: none; }
+
+    section#publications .publications-list {
+        max-height: none !important;
+        overflow: visible !important;
+    }
+    .pub-section-title::after { display: none; }
+
+    .reveal {
+        opacity: 1 !important;
+        transform: none !important;
+    }
 }

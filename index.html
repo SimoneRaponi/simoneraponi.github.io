@@ -35,6 +35,7 @@
     </script>
 </head>
 <body>
+<a href="#top" class="skip-link">Skip to content</a>
 <div id="scroll-progress"></div>
 <nav id="side-nav" class="side-nav" aria-label="Page navigation"></nav>
 
@@ -59,12 +60,12 @@
         <div class="bio-accordion">
 
             <div class="bio-item">
-                <button class="bio-trigger" aria-expanded="false">
+                <button class="bio-trigger" aria-expanded="true">
                     <span class="bio-name">WSENSE</span>
                     <span class="bio-meta">Senior Technical Team Leader &amp; Senior Technical Project Manager &nbsp;·&nbsp; 2025–present</span>
                     <span class="bio-arrow">▸</span>
                 </button>
-                <div class="bio-body">
+                <div class="bio-body open">
                     <div class="research-grid">
                         <div class="rg-item">
                             <span class="rg-key">AI &amp; Computer Vision</span>
@@ -423,7 +424,10 @@
                 at the frontier of AI, cybersecurity, or wherever the two collide,
                 why wait to find out?
             </p>
-            <a href="#" data-m class="signal-btn">Send me an email &rarr;</a>
+            <div class="signal-actions">
+                <a href="#" data-m class="signal-btn">Send me an email &rarr;</a>
+                <button type="button" class="copy-email-btn" data-copy-email>Copy email</button>
+            </div>
         </div>
     </section>
 
@@ -863,7 +867,7 @@
     <div class="rpanel-sep"></div>
     <div class="rpanel-links">
         <a href="#" data-m>Send me an email</a>
-        <a href="data/simone_raponi_cv.pdf" download>Download my CV</a>
+        <a href="data/simone_raponi_cv.pdf" download>Download my CV (PDF)</a>
         <a href="https://scholar.google.it/citations?hl=en&user=IgaW2DoAAAAJ" target="_blank" rel="noopener">Scholar</a>
         <a href="https://github.com/SimoneRaponi" target="_blank" rel="noopener">GitHub</a>
         <a href="https://www.linkedin.com/in/simone-raponi" target="_blank" rel="noopener">LinkedIn</a>
@@ -1345,6 +1349,24 @@
     var addr = p1 + p2 + p3 + p4 + p5;
     document.querySelectorAll('[data-m]').forEach(function (el) {
         el.href = 'mailto:' + addr;
+    });
+
+    var copyBtn = document.querySelector('[data-copy-email]');
+    if (!copyBtn) return;
+    if (!navigator.clipboard) {
+        copyBtn.style.display = 'none';
+        return;
+    }
+    var defaultLabel = copyBtn.textContent;
+    copyBtn.addEventListener('click', function () {
+        navigator.clipboard.writeText(addr).then(function () {
+            copyBtn.textContent = 'Copied!';
+            copyBtn.classList.add('copied');
+            setTimeout(function () {
+                copyBtn.textContent = defaultLabel;
+                copyBtn.classList.remove('copied');
+            }, 1600);
+        });
     });
 }());
 
