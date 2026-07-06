@@ -21,11 +21,24 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Install dependencies
+        run: |
+          sudo apt-get install -y tor
+          sudo service tor start
+          # Wait for Tor to bootstrap
+          sleep 20
+          pip install PySocks
+
       - name: Fetch Scholar stats
         shell: python3 {0}
         run: |
-          import json, re, sys, time, urllib.request
+          import json, re, socket, socks, sys, time, urllib.request
           from datetime import date
+
+          # Route all connections through Tor SOCKS5, since direct requests
+          # from GitHub-hosted runner IPs get a 403 from Google Scholar.
+          socks.set_default_proxy(socks.SOCKS5, "127.0.0.1", 9050)
+          socket.socket = socks.socksocket
 
           URL = 'https://scholar.google.com/citations?user=IgaW2DoAAAAJ&hl=en'
           HEADERS = {
