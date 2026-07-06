@@ -21,50 +21,63 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install dependencies
-        run: |
-          sudo apt-get install -y tor
-          sudo service tor start
-          # Wait for Tor to bootstrap
-          sleep 20
-
-      - name: Install scholarly
-        run: pip install scholarly PySocks
-
       - name: Fetch Scholar stats
         shell: python3 {0}
         run: |
-          import json, os, sys, time, socks, socket
+          import json, re, sys, time, urllib.request
           from datetime import date
-          from scholarly import scholarly
 
-          # Patch the default socket to route all connections through Tor SOCKS5
-          # (bypasses scholarly's proxy system entirely)
-          socks.set_default_proxy(socks.SOCKS5, "127.0.0.1", 9050)
-          socket.socket = socks.socksocket
+          URL = 'https://scholar.google.com/citations?user=IgaW2DoAAAAJ&hl=en'
+          HEADERS = {
+              'User-Agent': ('Mozilla/5.0 (Windows NT 10.0; Win64; x64) '
+                              'AppleWebKit/537.36 (KHTML, like Gecko) '
+                              'Chrome/120.0 Safari/537.36'),
+          }
 
-          author = None
+          with open('data/scholar.json') as fh:
+              previous = json.load(fh)
+
+          html = None
           for attempt in range(3):
               try:
-                  author = scholarly.search_author_id('IgaW2DoAAAAJ')
-                  scholarly.fill(author, sections=['indices'])
+                  req = urllib.request.Request(URL, headers=HEADERS)
+                  with urllib.request.urlopen(req, timeout=30) as r:
+                      if r.status != 200:
+                          raise RuntimeError(f'HTTP {r.status}')
+                      html = r.read().decode('utf-8', errors='replace')
                   break
               except Exception as exc:
                   print(f'Attempt {attempt + 1} failed: {exc}', file=sys.stderr)
                   if attempt < 2:
-                      time.sleep(30)
+                      time.sleep(15)
 
-          if author is None:
-              print('All attempts failed', file=sys.stderr)
+          if html is None:
+              print('All attempts failed to fetch the Scholar page', file=sys.stderr)
+              sys.exit(1)
+
+          # Order on the profile page: citations(all), citations(since-2021),
+          # hindex(all), hindex(since-2021), i10(all), i10(since-2021)
+          stats = re.findall(r'gsc_rsb_std">([\d,]+)<', html)
+          if len(stats) < 3:
+              print(f'Could not parse citation stats, found: {stats}', file=sys.stderr)
+              sys.exit(1)
+
+          citations = int(stats[0].replace(',', ''))
+          hindex = int(stats[2].replace(',', ''))
+
+          if citations < previous.get('citations', 0):
+              print(f"Parsed citations ({citations}) is lower than the "
+                    f"previously stored value ({previous.get('citations', 0)}) "
+                    "- looks like a bad scrape, refusing to overwrite.",
+                    file=sys.stderr)
               sys.exit(1)
 
           data = {
-              'citations': author.get('citedby', 0),
-              'hindex':    author.get('hindex', 0),
+              'citations': citations,
+              'hindex':    hindex,
               'updated':   date.today().isoformat(),
           }
 
-          os.makedirs('data', exist_ok=True)
           with open('data/scholar.json', 'w') as fh:
               json.dump(data, fh, indent=2)
               fh.write('\n')
