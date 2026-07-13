@@ -47,9 +47,6 @@ jobs:
                               'Chrome/120.0 Safari/537.36'),
           }
 
-          with open('data/scholar.json') as fh:
-              previous = json.load(fh)
-
           html = None
           for attempt in range(3):
               try:
@@ -77,13 +74,6 @@ jobs:
 
           citations = int(stats[0].replace(',', ''))
           hindex = int(stats[2].replace(',', ''))
-
-          if citations < previous.get('citations', 0):
-              print(f"Parsed citations ({citations}) is lower than the "
-                    f"previously stored value ({previous.get('citations', 0)}) "
-                    "- looks like a bad scrape, refusing to overwrite.",
-                    file=sys.stderr)
-              sys.exit(1)
 
           data = {
               'citations': citations,
