@@ -68,8 +68,8 @@
                 <p class="out hint" id="term-hint" hidden>Type <b>help</b>, or try:</p>
             </div>
             <form class="term-in" id="term-form" hidden>
-                <label for="term-input" class="pr">simone@raponi:~$</label>
-                <input id="term-input" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="go">
+                <label for="term-input" class="pr"><span class="host">simone@raponi:</span>~$</label>
+                <input id="term-input" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="go">
             </form>
         </div>
 
@@ -882,7 +882,7 @@
             <li class="done">Privacy</li>
             <li class="done">IoT</li>
             <li class="ongoing">
-                A Better World
+                A better world
                 <span class="ongoing-track"><span class="ongoing-fill"></span></span>
             </li>
         </ul>
@@ -1430,6 +1430,7 @@
         linkedin: 'https://www.linkedin.com/in/simone-raponi'
     };
     var history = [], hi = 0;
+    var touch = window.matchMedia('(pointer: coarse)').matches;
     var WHOAMI = body.querySelector('.out').innerHTML;
 
     function esc(s) { return s.replace(/[&<>"]/g, function (c) { return '&#' + c.charCodeAt(0) + ';'; }); }
@@ -1515,6 +1516,7 @@
         e.preventDefault();
         run(input.value);
         input.value = '';
+        if (touch) input.blur(); // close the soft keyboard so the output is visible
     });
 
     input.addEventListener('keydown', function (e) {
@@ -1527,7 +1529,7 @@
     body.addEventListener('click', function (e) {
         var chip = e.target.closest('[data-cmd]');
         if (chip) return run(chip.dataset.cmd);
-        if (!e.target.closest('a') && !String(window.getSelection())) input.focus({ preventScroll: true });
+        if (!touch && !e.target.closest('a') && !String(window.getSelection())) input.focus({ preventScroll: true });
     });
 
     var hint = document.getElementById('term-hint');

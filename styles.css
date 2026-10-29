@@ -462,21 +462,6 @@ h2 {
     padding-bottom: var(--sp-3);
     border-bottom: 1px solid var(--border-subtle);
     position: relative;
-    counter-increment: section;
-}
-
-body { counter-reset: section; }
-
-/* Code-comment section index, echoing the hero terminal */
-h2::before {
-    content: '// ' counter(section, decimal-leading-zero);
-    display: block;
-    font-family: 'JetBrains Mono', 'SF Mono', 'Fira Code', 'Consolas', monospace;
-    font-size: var(--fs-300);
-    font-weight: 500;
-    color: var(--accent);
-    letter-spacing: 0.5px;
-    margin-bottom: 2px;
 }
 
 /* Signature motif: a small waveform, echoing the signal-processing thread
@@ -1501,6 +1486,8 @@ body::after {
     header .term-body p { font-size: var(--fs-300); }
     .term-in         { padding: 6px var(--sp-3) var(--sp-3); }
     .term .k         { min-width: 9ch; margin-right: var(--sp-2); }
+    .term-in .host   { display: none; } /* "~$" alone leaves room to type */
+    .term-chip       { padding: 5px 10px; margin: 3px 3px 3px 0; } /* finger-sized tap targets */
 }
 
 /* Below ~480px, two columns squeeze the longer research descriptions into
