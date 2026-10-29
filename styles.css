@@ -380,7 +380,6 @@ header .term-body p {
 .term .out   { color: var(--text); }
 .term .dim   { color: var(--text-muted); }
 .term .pr    { color: #22c55e; margin-right: 6px; white-space: nowrap; }
-.term .dir   { color: var(--accent-light); font-weight: 500; }
 .term .k     { display: inline-block; min-width: 13ch; color: var(--accent-light); margin-right: var(--sp-3); }
 .term strong { color: var(--text-bright); }
 .term .hint  { color: var(--text-muted); margin-top: var(--sp-3); }
