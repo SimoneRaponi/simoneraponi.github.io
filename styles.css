@@ -134,7 +134,7 @@ h1 {
 
 /* ── Bio accordion ── */
 .bio-accordion-label {
-    font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+    font-family: 'JetBrains Mono', 'SF Mono', 'Fira Code', 'Consolas', monospace;
     font-size: var(--fs-600);
     text-transform: uppercase;
     letter-spacing: 1.2px;
@@ -187,7 +187,7 @@ h1 {
 }
 
 .bio-meta {
-    font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+    font-family: 'JetBrains Mono', 'SF Mono', 'Fira Code', 'Consolas', monospace;
     font-size: var(--fs-400);
     color: rgba(var(--text-muted-rgb),0.85);
     letter-spacing: 0.3px;
@@ -317,6 +317,106 @@ header p {
     line-height: 1.75;
 }
 
+/* ── Terminal ── */
+.term {
+    max-width: 720px;
+    margin: var(--sp-2) auto 0;
+    text-align: left;
+    background: #0a0e14;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 14px 40px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(var(--accent-rgb), 0.05);
+    font-family: 'JetBrains Mono', 'SF Mono', 'Fira Code', 'Consolas', monospace;
+    font-size: var(--fs-400);
+    transition: border-color 0.2s;
+}
+
+.term:focus-within { border-color: rgba(var(--accent-rgb), 0.5); }
+
+.term-bar {
+    display: flex;
+    align-items: center;
+    padding: var(--sp-2) var(--sp-3);
+    background: var(--bg);
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.term-dots i {
+    display: inline-block;
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    margin-right: 6px;
+    background: #ff5f57;
+}
+.term-dots i:nth-child(2) { background: #febc2e; }
+.term-dots i:nth-child(3) { background: #28c840; }
+
+.term-title {
+    flex: 1;
+    text-align: center;
+    margin-right: 51px; /* offsets the dots so the title is truly centered */
+    font-size: var(--fs-200);
+    color: var(--text-muted);
+}
+
+.term-body {
+    padding: 14px var(--sp-4) 0;
+    max-height: 340px;
+    overflow-y: auto;
+    cursor: text;
+}
+
+.term-body p,
+header .term-body p {
+    margin: 0 0 6px;
+    max-width: none;
+    font-size: var(--fs-400);
+    line-height: 1.6;
+}
+
+.term .cmd   { color: var(--text-bright); margin-top: 10px; }
+.term .out   { color: var(--text); }
+.term .dim   { color: var(--text-muted); }
+.term .pr    { color: #22c55e; margin-right: 6px; white-space: nowrap; }
+.term .dir   { color: var(--accent-light); font-weight: 500; }
+.term .k     { display: inline-block; min-width: 13ch; color: var(--accent-light); margin-right: var(--sp-3); }
+.term strong { color: var(--text-bright); }
+.term .hint  { color: var(--text-muted); margin-top: var(--sp-3); }
+
+.term-chip {
+    font: inherit;
+    font-size: var(--fs-300);
+    color: var(--accent-light);
+    background: rgba(var(--accent-rgb), 0.06);
+    border: 1px solid rgba(var(--accent-rgb), 0.3);
+    border-radius: 4px;
+    padding: 0 7px;
+    margin: 2px 2px 2px 0;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+}
+.term-chip:hover { background: rgba(var(--accent-rgb), 0.15); border-color: var(--accent); }
+
+.term-in {
+    display: flex;
+    align-items: baseline;
+    padding: 6px var(--sp-4) 14px;
+}
+
+.term-in input {
+    flex: 1;
+    min-width: 0;
+    background: none;
+    border: 0;
+    outline: 0;
+    padding: 0;
+    color: var(--text-bright);
+    font: inherit;
+    caret-color: var(--accent);
+}
+
 /* ── Stats strip ── */
 .stats-row {
     display: flex;
@@ -363,6 +463,21 @@ h2 {
     padding-bottom: var(--sp-3);
     border-bottom: 1px solid var(--border-subtle);
     position: relative;
+    counter-increment: section;
+}
+
+body { counter-reset: section; }
+
+/* Code-comment section index, echoing the hero terminal */
+h2::before {
+    content: '// ' counter(section, decimal-leading-zero);
+    display: block;
+    font-family: 'JetBrains Mono', 'SF Mono', 'Fira Code', 'Consolas', monospace;
+    font-size: var(--fs-300);
+    font-weight: 500;
+    color: var(--accent);
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
 }
 
 /* Signature motif: a small waveform, echoing the signal-processing thread
@@ -437,7 +552,7 @@ a:hover {
     color: var(--accent-light);
     font-size: var(--fs-300);
     white-space: nowrap;
-    font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+    font-family: 'JetBrains Mono', 'SF Mono', 'Fira Code', 'Consolas', monospace;
     flex-shrink: 0;
 }
 
@@ -518,7 +633,7 @@ a:hover {
     font-weight: 400;
     color: var(--accent-light);
     font-size: var(--fs-300);
-    font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+    font-family: 'JetBrains Mono', 'SF Mono', 'Fira Code', 'Consolas', monospace;
     letter-spacing: 0.04em;
     flex-shrink: 0;
     white-space: nowrap;
@@ -559,7 +674,7 @@ a:hover {
 }
 
 .grant-amount {
-    font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+    font-family: 'JetBrains Mono', 'SF Mono', 'Fira Code', 'Consolas', monospace;
     font-weight: 700;
     color: var(--accent);
     font-size: var(--fs-700);
@@ -724,7 +839,7 @@ a:hover {
 }
 
 .snav-label {
-    font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+    font-family: 'JetBrains Mono', 'SF Mono', 'Fira Code', 'Consolas', monospace;
     font-size: var(--fs-700);
     font-weight: 500;
     color: rgba(var(--text-muted-rgb),0.62);
@@ -958,7 +1073,7 @@ a:hover {
 }
 
 .rpanel-area-title {
-    font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+    font-family: 'JetBrains Mono', 'SF Mono', 'Fira Code', 'Consolas', monospace;
     font-size: var(--fs-400);
     color: rgba(255, 255, 255, 0.82);
     text-transform: uppercase;
@@ -975,7 +1090,7 @@ a:hover {
 }
 
 .rpanel-area-list li {
-    font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+    font-family: 'JetBrains Mono', 'SF Mono', 'Fira Code', 'Consolas', monospace;
     font-size: var(--fs-400);
     letter-spacing: 0.2px;
     margin: 0;
@@ -1054,7 +1169,7 @@ a:hover {
 }
 
 .rpanel-links a {
-    font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+    font-family: 'JetBrains Mono', 'SF Mono', 'Fira Code', 'Consolas', monospace;
     font-size: var(--fs-700);
     color: rgba(255, 255, 255, 0.82);
     text-decoration: none;
@@ -1105,7 +1220,7 @@ a:hover {
 }
 
 .mnav-label {
-    font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+    font-family: 'JetBrains Mono', 'SF Mono', 'Fira Code', 'Consolas', monospace;
     font-size: var(--fs-100);
     font-weight: 600;
     color: var(--accent);
@@ -1378,6 +1493,15 @@ body::after {
         transition: max-height 0.6s ease;
     }
     .research-grid { grid-template-columns: repeat(2, 1fr); }
+
+    /* Terminal: no inner scroll on touch (page scrolls instead), denser text;
+       16px input stops iOS zoom-on-focus */
+    .term-in input   { font-size: 16px; }
+    .term-body       { max-height: none; padding: var(--sp-3) var(--sp-3) 0; }
+    .term-body p,
+    header .term-body p { font-size: var(--fs-300); }
+    .term-in         { padding: 6px var(--sp-3) var(--sp-3); }
+    .term .k         { min-width: 9ch; margin-right: var(--sp-2); }
 }
 
 /* Below ~480px, two columns squeeze the longer research descriptions into
@@ -1457,6 +1581,8 @@ a[href^="http"]::after {
     #scroll-progress,
     .skip-link,
     .tw-cursor,
+    .term-in,
+    .term-bar,
     body::after,
     h2::after,
     a[href^="http"]::after {

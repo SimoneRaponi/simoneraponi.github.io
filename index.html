@@ -7,7 +7,7 @@
     <meta name="description" content="Simone Raponi: AI and Cybersecurity researcher with H-Index 16, 1,615 citations, 23 papers, 2 patents, and 1 book. Senior Technical Team Leader at WSENSE.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <link rel="canonical" href="https://simoneraponi.github.io/">
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%230ea5e9'/><text x='16' y='16' dominant-baseline='central' text-anchor='middle' fill='white' font-family='sans-serif' font-weight='700' font-size='15'>SR</text></svg>">
@@ -56,11 +56,24 @@
             </div>
         </div>
 
-        <p>
-            Nearly a decade of bringing <strong>AI&thinsp;&amp;&thinsp;ML</strong> to adversarial problems at the extremes,
-            from criminal networks and critical infrastructure to satellite systems and the ocean floor.
-            One question drives it all: where can intelligent systems make the decisive difference?
-        </p>
+        <div class="term" aria-label="Interactive terminal">
+            <div class="term-bar"><span class="term-dots"><i></i><i></i><i></i></span><span class="term-title">simone@raponi: ~</span></div>
+            <div class="term-body" id="term-body" aria-live="polite">
+                <p class="cmd"><span class="pr">simone@raponi:~$</span> whoami</p>
+                <p class="out">Senior Technical Team Leader &amp; Senior TPM @ WSENSE &middot; ex NATO CMRE &middot; ex Equixly (employee #4)</p>
+                <p class="cmd"><span class="pr">simone@raponi:~$</span> cat about.txt</p>
+                <p class="out">Nearly a decade of bringing <strong>AI&thinsp;&amp;&thinsp;ML</strong> to adversarial problems at the extremes,
+                    from criminal networks and critical infrastructure to satellite systems and the ocean floor.
+                    One question drives it all: where can intelligent systems make the decisive difference?</p>
+                <p class="cmd"><span class="pr">simone@raponi:~$</span> ls ./now/</p>
+                <p class="out"><span class="dir">asterion/</span> &nbsp; <span class="dir">seacure/</span> &nbsp; <span class="dir">seafence/</span> &nbsp; <span class="dir">deep-2.0/</span> &nbsp; <span class="dir">subsea-ai/</span></p>
+                <p class="out hint" id="term-hint" hidden>Type <b>help</b>, or try:</p>
+            </div>
+            <form class="term-in" id="term-form" hidden>
+                <label for="term-input" class="pr">simone@raponi:~$</label>
+                <input id="term-input" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="go">
+            </form>
+        </div>
 
         <div class="stats-row">
             <div class="stat">
@@ -1400,6 +1413,129 @@
             }, 1600);
         });
     });
+}());
+
+/* ── Interactive terminal ── */
+(function () {
+    var body  = document.getElementById('term-body');
+    var form  = document.getElementById('term-form');
+    var input = document.getElementById('term-input');
+    if (!body || !form) return;
+
+    var SECTIONS = {
+        news: 'latest-news', experience: 'experience', contact: 'signal', grants: 'grants', patents: 'patents',
+        publications: 'publications', services: 'academic-services', extras: 'extracurricular'
+    };
+    var LINKS = {
+        scholar:  'https://scholar.google.it/citations?hl=en&user=IgaW2DoAAAAJ',
+        github:   'https://github.com/SimoneRaponi',
+        linkedin: 'https://www.linkedin.com/in/simone-raponi'
+    };
+    var history = [], hi = 0;
+    var WHOAMI = body.querySelector('.out').innerHTML;
+
+    function esc(s) { return s.replace(/[&<>"]/g, function (c) { return '&#' + c.charCodeAt(0) + ';'; }); }
+    function chips(list) {
+        return list.map(function (c) { return '<button type="button" class="term-chip" data-cmd="' + c + '">' + c + '</button>'; }).join(' ');
+    }
+    function print(html, cls) {
+        var p = document.createElement('p');
+        p.className = cls || 'out';
+        p.innerHTML = html;
+        body.appendChild(p);
+        return p;
+    }
+
+    var CMDS = {
+        help: function () {
+            [['whoami', 'who I am'], ['ls', 'list sections'], ['cd &lt;section&gt;', 'jump to a section'],
+             ['grep &lt;word&gt;', 'search papers, patents, theses'], ['stats', 'research metrics'],
+             ['contact', 'get in touch'], ['cv', 'download my CV (PDF)'], ['scholar · github · linkedin', 'open profile'],
+             ['clear', 'clear the screen']
+            ].forEach(function (r) { print('<span class="k">' + r[0] + '</span>' + r[1]); });
+        },
+        whoami: function () { print(WHOAMI); },
+        ls: function () { print(chips(Object.keys(SECTIONS).map(function (s) { return 'cd ' + s; }))); },
+        cd: function (s) {
+            s = s.toLowerCase();
+            if (!s || s === '~' || s === '..') return window.scrollTo({ top: 0, behavior: 'smooth' });
+            var el = document.getElementById(SECTIONS[s]);
+            if (!el) return print('cd: no such section: ' + esc(s) + ' &mdash; try ' + chips(['ls']));
+            el.scrollIntoView({ behavior: 'smooth' });
+        },
+        grep: function (q) {
+            if (!q) return print('usage: grep &lt;word&gt; &nbsp; e.g. ' + chips(['grep satellite', 'grep dark web', 'grep IEEE']));
+            var re = new RegExp('\\b' + q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i');
+            var hits = [].filter.call(document.querySelectorAll('.publications-list .pub-content'), function (c) { return re.test(c.textContent); });
+            if (!hits.length) return print('no matches for "' + esc(q) + '"');
+            hits.forEach(function (c) {
+                var year = c.parentNode.querySelector('.date-highlight').textContent;
+                var title = c.querySelector('.pub-title');
+                var p = print('<span class="k">' + esc(year) + '</span>');
+                p.appendChild(title.querySelector('a') ? title.querySelector('a').cloneNode(true) : document.createTextNode(title.textContent));
+            });
+            print(hits.length + ' match' + (hits.length > 1 ? 'es' : ''), 'out dim');
+        },
+        stats: function () {
+            print([].map.call(document.querySelectorAll('.stat'), function (s) {
+                return '<span class="k">' + esc(s.querySelector('.stat-label').textContent) + '</span>' + esc(s.querySelector('.stat-num').textContent);
+            }).join('<br>'));
+        },
+        contact: function () {
+            var mail = document.querySelector('[data-m]').href;
+            print('<a href="' + mail + '">' + esc(mail.replace('mailto:', '')) + '</a> &nbsp; or ' + chips(['cd contact']));
+        },
+        cv: function () {
+            print('<a href="data/simone_raponi_cv.pdf" download>simone_raponi_cv.pdf</a> &mdash; downloading&hellip;');
+            body.lastChild.querySelector('a').click();
+        },
+        clear: function () { body.innerHTML = ''; },
+        sudo: function () { print('nice try. this incident will be reported to the Designated Officer for Information Security.'); }
+    };
+    Object.keys(LINKS).forEach(function (k) {
+        CMDS[k] = function () {
+            print('opening <a href="' + LINKS[k] + '" target="_blank" rel="noopener">' + k + '</a>&hellip;');
+            window.open(LINKS[k], '_blank', 'noopener');
+        };
+    });
+
+    function run(line) {
+        line = line.trim();
+        var echo = print('<span class="pr">simone@raponi:~$</span> ', 'cmd');
+        echo.appendChild(document.createTextNode(line));
+        if (line) history.push(line);
+        hi = history.length;
+        var args = line.split(/\s+/), name = args.shift().toLowerCase(), arg = args.join(' ');
+        if (CMDS[name]) CMDS[name](arg);
+        else if (SECTIONS[name]) CMDS.cd(name);
+        else if (name) print('command not found: ' + esc(name) + ' &mdash; try ' + chips(['help']));
+        body.scrollTop = body.scrollHeight;
+        if (name !== 'cd' && !SECTIONS[name]) form.scrollIntoView({ block: 'nearest' });
+    }
+
+    form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        run(input.value);
+        input.value = '';
+    });
+
+    input.addEventListener('keydown', function (e) {
+        if (e.key !== 'ArrowUp' && e.key !== 'ArrowDown') return;
+        e.preventDefault();
+        hi = Math.max(0, Math.min(history.length, hi + (e.key === 'ArrowUp' ? -1 : 1)));
+        input.value = history[hi] || '';
+    });
+
+    body.addEventListener('click', function (e) {
+        var chip = e.target.closest('[data-cmd]');
+        if (chip) return run(chip.dataset.cmd);
+        if (!e.target.closest('a') && !String(window.getSelection())) input.focus({ preventScroll: true });
+    });
+
+    var hint = document.getElementById('term-hint');
+    hint.innerHTML += ' ' + chips(['grep satellite', 'ls', 'stats', 'cv', 'contact']);
+    hint.hidden = false;
+    form.hidden = false;
 }());
 
 </script>
